@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard • News</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <h1 class="brand">Admin Dashboard</h1>
+        <div class="header-actions">
+          <a class="btn" href="viewer.html">Open viewer</a>
+          <button id="logout" class="btn">Logout</button>
+        </div>
+      </div>
+      <p class="container subtitle">Manage news and read feedback</p>
+    </header>
+
+    <main class="container">
+      <div class="toolbar">
+        <div class="muted">Signed in as Admin</div>
+        <div class="header-actions">
+          <a class="btn primary" href="compose.html">Create news article</a>
+        </div>
+      </div>
+
+      <section class="card" style="padding:20px">
+        <h3>Published News</h3>
+        <table class="table mt-3" id="postsTable">
+          <thead>
+            <tr><th>Title</th><th>Type</th><th>Date</th><th></th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <section class="card mt-6" style="padding:20px">
+        <h3>Viewer Feedback</h3>
+        <div id="fbList" class="feedback-list"></div>
+      </section>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script>
+      // guard
+      if (sessionStorage.getItem('isAdmin') !== 'true') {
+        window.location.href = 'index.html';
+      }
+
+      document.getElementById('logout').addEventListener('click', () => {
+        sessionStorage.removeItem('isAdmin');
+        window.location.href = 'index.html';
+      });
+
+      function renderPosts() {
+        const tbody = document.querySelector('#postsTable tbody');
+        const posts = window.News.all();
+        tbody.innerHTML = posts.map(p => `
+          <tr>
+            <td>${p.emoji || ''} ${p.title}</td>
+            <td>${p.type}</td>
+            <td>${fmtDate(p.createdAt)}</td>
+            <td><button class="btn" data-del="${p.id}">Delete</button></td>
+          </tr>
+        `).join('');
+        tbody.querySelectorAll('button[data-del]').forEach(b => {
+          b.addEventListener('click', () => {
+            if (confirm('Delete this article?')) {
+              window.News.remove(b.getAttribute('data-del'));
+              renderPosts();
+            }
+          });
+        });
+      }
+
+      function renderFeedback() {
+        const container = document.getElementById('fbList');
+        const list = window.Feedback.list();
+        if (!list.length) { container.innerHTML = '<p class="muted">No feedback yet.</p>'; return; }
+        container.innerHTML = list.map(f => `
+          <div class="feedback-item">
+            <div><strong>${f.name || 'Anonymous'}</strong> • <span class="muted">${fmtDate(f.createdAt)}</span></div>
+            <div class="mt-2">${f.message}</div>
+            <div class="mt-2"><button class="btn" data-fdel="${f.id}">Remove</button></div>
+          </div>
+        `).join('');
+        container.querySelectorAll('button[data-fdel]').forEach(b => {
+          b.addEventListener('click', () => {
+            window.Feedback.remove(b.getAttribute('data-fdel'));
+            renderFeedback();
+          });
+        });
+      }
+
+      renderPosts();
+      renderFeedback();
+    </script>
+  </body>
+  </html>
+

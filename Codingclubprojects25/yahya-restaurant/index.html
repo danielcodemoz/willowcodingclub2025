@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🍴Fork It Over🍴Menu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #e7e1a9;
+      color: #333;
+    }
+
+    header {
+      background-color: #e4d594;
+      color: #8B0000;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    section {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    h2 {
+      border-bottom: 2px solid #8B0000;
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+      color: #8B0000;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #ddd;
+      cursor: pointer;
+    }
+
+    li:hover {
+      background-color: #f0e68c;
+    }
+
+    .price {
+      font-weight: bold;
+      color: #444;
+    }
+
+    .order-button-container {
+      text-align: center;
+      margin: 20px;
+    }
+
+    .order-button {
+      background-color: #8B0000;
+      color: white;
+      padding: 12px 25px;
+      text-decoration: none;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+
+    .order-button:hover {
+      background-color: #a20000;
+    }
+
+    footer {
+      background-color: #333;
+      color: rgb(209, 196, 154);
+      text-align: center;
+      padding: 15px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🍴Fork It Over🍴</h1>
+  </header>
+
+  <section>
+    <h2>Starters</h2>
+    <ul>
+      <li><strong>Garlic Bread</strong> <span class="price">$5</span></li>
+      <li><strong>Tomato Soup</strong> <span class="price">$6</span></li>
+      <li><strong>Bruschetta</strong> <span class="price">$7</span></li>
+      <li><strong>Mercimek Çorbası</strong> <span class="price">$7</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Main Dishes</h2>
+    <ul>
+      <li><strong>Grilled Chicken</strong> <span class="price">$12</span></li>
+      <li><strong>Spaghetti Bolognese</strong> <span class="price">$14</span></li>
+      <li><strong>Vegetarian Pizza</strong> <span class="price">$11</span></li>
+      <li><strong>İskender Kebab 🍖</strong> <span class="price">$16</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Desserts</h2>
+    <ul>
+      <li><strong>Chocolate Cake</strong> <span class="price">$6</span></li>
+      <li><strong>Ice Cream Sundae</strong> <span class="price">$5</span></li>
+      <li><strong>Tiramisu</strong> <span class="price">$7</span></li>
+      <li><strong>Baklava 🍰</strong> <span class="price">$7</span></li>
+    </ul>
+  </section>
+
+  <div class="order-button-container">
+    <a href="#" class="order-button" id="orderNow">Order Now</a>
+  </div>
+
+  <footer>
+    <p>Opening Hours: Mon - Sun | 11:00 AM - 10:00 PM | AMERICA | +1 (667) 354-5235</p>
+  </footer>
+
+  <script>
+    const cart = [];
+
+    // Add click events to all dishes
+    document.querySelectorAll('li').forEach(item => {
+      item.addEventListener('click', () => {
+        const dishName = item.querySelector('strong').innerText;
+        cart.push(dishName);
+        alert(`${dishName} added to cart!`);
+      });
+    });
+
+    // Order Now button
+    document.getElementById('orderNow').addEventListener('click', () => {
+      if(cart.length === 0){
+        alert("Your cart is empty! Please select dishes first.");
+        return;
+      }
+      const name = prompt("Enter your name:");
+      if(!name) return;
+      const address = prompt("Enter your address:");
+      if(!address) return;
+
+      let orderSummary = `Thank you, ${name}!\n\nYour order:\n`;
+      cart.forEach((dish, index) => {
+        orderSummary += `${index + 1}. ${dish}\n`;
+      });
+      orderSummary += `\nDelivery Address: ${address}`;
+      alert(orderSummary);
+    });
+  </script>
+
+</body>
+</html>

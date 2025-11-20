@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>News Portal</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <h1 class="brand">News Portal</h1>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card chooser">
+        <h2>Who are you?</h2>
+        <div class="choose-actions">
+          <button id="adminBtn" class="btn primary">I’m an Admin</button>
+          <a class="btn" href="viewer.html">I’m a Viewer</a>
+        </div>
+        <p class="hint">Admins need the 6‑digit code to continue.</p>
+      </section>
+    </main>
+
+    <div id="adminModal" class="modal hidden" aria-hidden="true" role="dialog" aria-labelledby="adminModalTitle">
+      <div class="modal-content">
+        <h3 id="adminModalTitle">Admin Login</h3>
+        <p>Enter 6‑digit code</p>
+        <input id="adminCode" type="password" inputmode="numeric" pattern="\\d{6}" maxlength="6" placeholder="000000" class="input" />
+        <div class="row">
+          <button id="loginAdmin" class="btn primary">Continue</button>
+          <button id="closeModal" class="btn">Cancel</button>
+        </div>
+        <p id="loginError" class="error hidden">Incorrect code. Try again.</p>
+      </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+      const adminBtn = document.getElementById('adminBtn');
+      const modal = document.getElementById('adminModal');
+      const closeModal = document.getElementById('closeModal');
+      const loginAdmin = document.getElementById('loginAdmin');
+      const adminCode = document.getElementById('adminCode');
+      const loginError = document.getElementById('loginError');
+
+      adminBtn.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+        modal.setAttribute('aria-hidden', 'false');
+        adminCode.focus();
+      });
+      closeModal.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
+        loginError.classList.add('hidden');
+        adminCode.value = '';
+      });
+      loginAdmin.addEventListener('click', () => {
+        if (adminCode.value === '000000') {
+          sessionStorage.setItem('isAdmin', 'true');
+          window.location.href = 'admin.html';
+        } else {
+          loginError.classList.remove('hidden');
+        }
+      });
+      adminCode.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') loginAdmin.click();
+      });
+    </script>
+  </body>
+  </html>
+

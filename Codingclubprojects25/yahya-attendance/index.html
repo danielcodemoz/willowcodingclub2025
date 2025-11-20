@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Attendance Tracker — Single File</title>
+
+  <!-- jsPDF + AutoTable for table-based PDF exports -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-mn3f3m+6k5sqrn7s3a7yX1r8g2X3o2w4b+e1Z6zY2u0o+KkQw1k2iZp1Yk6r5z4YxVxgq2q3K7r4z5t6QfJ1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js" integrity="sha512-3o7p7k5Yp7Kx5JfYQ6zR1k2n3iY4u5r7q3h4x5z1R6v8s2p2x0A5z6h7g9k2m1lQ8z9e0a1b2c3d4e5f6g7h8==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <style>
+    :root{
+      --bg: #f7fafc;
+      --card: #ffffff;
+      --text: #0f1724;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --danger: #ef4444;
+      --radius: 10px;
+    }
+    [data-theme="dark"]{
+      --bg: #071023;
+      --card: #081226;
+      --text: #e6eef8;
+      --muted: #98a6b3;
+      --accent: #4f8cff;
+      --danger: #f87171;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:linear-gradient(180deg,var(--bg), #e9eefb 140%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      min-height:100vh;
+      padding:20px;
+    }
+
+    .container{max-width:1100px;margin:0 auto}
+    header{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap}
+    h1{margin:0;font-size:20px}
+    nav{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);
+      background:var(--card);cursor:pointer;text-decoration:none;color:var(--text);font-weight:600;
+      box-shadow: 0 1px 3px rgba(2,6,23,0.04);
+    }
+    .btn.small{padding:6px 8px;font-size:13px}
+    .card{background:var(--card);padding:14px;border-radius:var(--radius);box-shadow:0 6px 20px rgba(2,6,23,0.04)}
+    .grid{display:grid;gap:12px}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    .grid.cols-2{grid-template-columns:repeat(2,1fr)}
+    .flex{display:flex;gap:12px;align-items:center}
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    input[type="text"], input[type="date"], select{
+      width:100%;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);background:transparent;color:var(--text)
+    }
+    .list{margin:0;padding:0;list-style:none}
+    .list li{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px dashed rgba(0,0,0,0.03)}
+    .muted{color:var(--muted);font-size:13px}
+    .small{font-size:13px}
+    .chip{display:inline-flex;gap:6px;padding:6px 8px;border-radius:999px;background:rgba(0,0,0,0.04);font-size:13px}
+    .attendance-row{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px}
+    .att-controls{display:flex;gap:8px;align-items:center}
+    .square{
+      width:28px;height:28px;border:1px solid rgba(0,0,0,0.12);display:inline-grid;place-items:center;border-radius:6px;cursor:pointer;
+      user-select:none;background:transparent;
+    }
+    .square.checked{background:var(--accent);color:white;border-color:transparent}
+    .square.absent.checked{background:var(--danger)}
+    .school-input{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(0,0,0,0.08)}
+    .note{font-size:13px;color:var(--muted);margin-top:8px}
+    footer{margin-top:20px;text-align:center;color:var(--muted);font-size:13px}
+
+    @media (max-width:900px){
+      .grid.cols-3{grid-template-columns:repeat(1,1fr)}
+      .grid.cols-2{grid-template-columns:repeat(1,1fr)}
+      header{flex-direction:column;align-items:flex-start;gap:8px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div style="display:flex;gap:12px;align-items:center">
+        <h1>Attendance Tracker</h1>
+        <div class="muted small">• Single-file | localStorage</div>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:center">
+        <nav aria-label="Main">
+          <button class="btn small" id="navHome">Home</button>
+          <button class="btn small" id="navStudents">Students</button>
+          <button class="btn small" id="navSections">Sections</button>
+          <button class="btn small" id="navAttendance">Attendance</button>
+        </nav>
+
+        <div style="display:flex;gap:8px;align-items:center;margin-left:8px">
+          <select id="langSelect" aria-label="Language selector" class="small" style="padding:8px;border-radius:8px">
+            <option value="en">EN</option>
+            <option value="pt">PT</option>
+            <option value="tr">TR</option>
+          </select>
+          <button class="btn small" id="themeToggle">Toggle theme</button>
+        </div>
+      </div>
+    </header>
+
+    <main id="mainView" class="grid">
+
+      <!-- HOME -->
+      <section id="viewHome" class="card">
+        <h2 style="margin-top:0">Assign Student → Section</h2>
+
+        <div class="grid cols-3" style="align-items:center">
+          <div>
+            <label id="lblStudent">Student</label>
+            <select id="selAssignStudent"></select>
+          </div>
+
+          <div>
+            <label id="lblSection">Section</label>
+            <select id="selAssignSection"></select>
+          </div>
+
+          <div style="display:flex;align-items:end">
+            <button class="btn" id="assignBtn">Assign</button>
+          </div>
+        </div>
+
+        <hr style="margin:12px 0;border:none;border-top:1px solid rgba(0,0,0,0.06)">
+
+        <h3 style="margin:0 0 8px 0">Students & Sections</h3>
+        <ul id="studentsSummary" class="list muted"></ul>
+      </section>
+
+      <!-- STUDENTS -->
+      <section id="viewStudents" class="card" style="display:none">
+        <h2 style="margin-top:0" id="lblManageStudents">Manage Students</h2>
+
+        <div class="grid cols-2" style="align-items:center">
+          <div>
+            <label id="lblStudentName">Student name</label>
+            <input type="text" id="studentName" placeholder="e.g., Rumi" />
+          </div>
+          <div style="display:flex;align-items:end">
+            <button class="btn" id="addStudentBtn">Add Student</button>
+          </div>
+        </div>
+
+        <ul id="studentsList" class="list" style="margin-top:12px"></ul>
+      </section>
+
+      <!-- SECTIONS -->
+      <section id="viewSections" class="card" style="display:none">
+        <h2 style="margin-top:0" id="lblManageSections">Manage Sections</h2>
+
+        <div class="grid cols-2" style="align-items:center">
+          <div>
+            <label id="lblSectionName">Section name</label>
+            <input type="text" id="sectionName" placeholder="e.g., Art" />
+          </div>
+          <div style="display:flex;align-items:end">
+            <button class="btn" id="addSectionBtn">Add Section</button>
+          </div>
+        </div>
+
+        <ul id="sectionsList" class="list" style="margin-top:12px"></ul>
+      </section>
+
+      <!-- ATTENDANCE -->
+      <section id="viewAttendance" class="card" style="display:none">
+        <h2 style="margin-top:0" id="lblMarkAttendance">Mark Attendance</h2>
+
+        <div class="grid cols-3" style="align-items:center">
+          <div>
+            <label id="lblDate">Date</label>
+            <input type="date" id="attDate" />
+          </div>
+
+          <div>
+            <label id="lblSectionSel">Select section</label>
+            <select id="attSection"></select>
+          </div>
+
+          <div style="display:flex;align-items:end;gap:8px">
+            <button class="btn" id="loadStudentsForAttendance">Load</button>
+            <button class="btn" id="saveAttendanceBtn">Save</button>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <label class="small">School name (optional)</label>
+          <input id="schoolName" class="school-input" placeholder="e.g., Bright Future School">
+        </div>
+
+        <div style="margin-top:12px" id="attendanceArea" aria-live="polite">
+          <!-- dynamically filled -->
+        </div>
+
+        <div class="note">For each student tick <strong>Present</strong> or <strong>Absent</strong>.</div>
+
+        <hr style="margin:12px 0;border:none;border-top:1px solid rgba(0,0,0,0.06)">
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <label class="small muted">Export</label>
+          <button class="btn small" id="exportCsvBtn">Export CSV</button>
+          <button class="btn small" id="exportPdfBtn">Export PDF</button>
+        </div>
+
+        <div style="margin-top:12px">
+          <h3 style="margin:6px 0 8px 0">Saved records</h3>
+          <ul id="recordsList" class="list muted"></ul>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      Built-in-browser app • data saved locally (browser). Open in VS Code with Live Server for best experience.
+    </footer>
+  </div>
+
+<script>
+/* ---------------------------
+   Translations
+   --------------------------- */
+const L = {
+  en: {
+    assign: 'Assign', student: 'Student', section: 'Section',
+    students: 'Students', sections: 'Sections', attendance: 'Attendance',
+    present: 'Present', absent: 'Absent', save: 'Save',
+    export_csv: 'Export CSV', export_pdf: 'Export PDF',
+    manage_students: 'Manage Students', manage_sections: 'Manage Sections',
+    mark_attendance: 'Mark Attendance', student_name_ph: 'e.g., Rumi',
+    section_name_ph: 'e.g., Art', attendance_saved: 'Attendance saved',
+    no_sections: 'No sections. Add one first.', no_students: 'No students. Add students first.',
+    loading: 'Loading...'
+  },
+  pt: {
+    assign: 'Atribuir', student: 'Aluno', section: 'Seção',
+    students: 'Alunos', sections: 'Seções', attendance: 'Presença',
+    present: 'Presente', absent: 'Ausente', save: 'Salvar',
+    export_csv: 'Exportar CSV', export_pdf: 'Exportar PDF',
+    manage_students: 'Gerenciar Alunos', manage_sections: 'Gerenciar Seções',
+    mark_attendance: 'Marcar Presença', student_name_ph: 'ex., Rumi',
+    section_name_ph: 'ex., Arte', attendance_saved: 'Presença salva',
+    no_sections: 'Nenhuma seção. Adicione uma.', no_students: 'Nenhum aluno. Adicione alunos.',
+    loading: 'Carregando...'
+  },
+  tr: {
+    assign: 'Ata', student: 'Öğrenci', section: 'Bölüm',
+    students: 'Öğrenciler', sections: 'Bölümler', attendance: 'Yoklama',
+    present: 'Var', absent: 'Yok', save: 'Kaydet',
+    export_csv: 'CSV Dışa Aktar', export_pdf: 'PDF Dışa Aktar',
+    manage_students: 'Öğrencileri Yönet', manage_sections: 'Bölümleri Yönet',
+    mark_attendance: 'Yoklama Yap', student_name_ph: 'örn., Rumi',
+    section_name_ph: 'örn., Sanat', attendance_saved: 'Yoklama kaydedildi',
+    no_sections: 'Bölüm yok. Lütfen ekleyin.', no_students: 'Öğrenci yok. Lütfen öğrenci ekleyin.',
+    loading: 'Yükleniyor...'
+  }
+};
+
+/* ---------------------------
+   Storage & Model
+   --------------------------- */
+const storageKey = 'attendance_app_v2';
+function readStore(){
+  const raw = localStorage.getItem(storageKey);
+  if(!raw) return {students:[], sections:[], attendance:{}, settings:{theme:'light', lang:'en'}};
+  try{ return JSON.parse(raw); } catch(e){ return {students:[], sections:[], attendance:{}, settings:{theme:'light', lang:'en'}}; }
+}
+function writeStore(s){ localStorage.setItem(storageKey, JSON.stringify(s)); }
+
+let store = readStore();
+if(!store.students) store.students = [];
+if(!store.sections) store.sections = [];
+if(!store.attendance) store.attendance = {};
+if(!store.settings) store.settings = {theme:'light', lang:'en'};
+
+/* ---------------------------
+   Utils
+   --------------------------- */
+function uid(prefix='id'){ return prefix+'_'+Math.random().toString(36).slice(2,9); }
+function t(key){ const lang = store.settings.lang || 'en'; return (L[lang] && L[lang][key]) || L['en'][key] || key; }
+function escapeHtml(s){ if(!s) return ''; return s.replace(/[&<>"']/g, (m)=> ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+/* ---------------------------
+   Elements
+   --------------------------- */
+const navHome = document.getElementById('navHome');
+const navStudents = document.getElementById('navStudents');
+const navSections = document.getElementById('navSections');
+const navAttendance = document.getElementById('navAttendance');
+
+const viewHome = document.getElementById('viewHome');
+const viewStudents = document.getElementById('viewStudents');
+const viewSections = document.getElementById('viewSections');
+const viewAttendance = document.getElementById('viewAttendance');
+
+const selAssignStudent = document.getElementById('selAssignStudent');
+const selAssignSection = document.getElementById('selAssignSection');
+const assignBtn = document.getElementById('assignBtn');
+
+const studentsSummary = document.getElementById('studentsSummary');
+
+const studentNameInput = document.getElementById('studentName');
+const addStudentBtn = document.getElementById('addStudentBtn');
+const studentsList = document.getElementById('studentsList');
+
+const sectionNameInput = document.getElementById('sectionName');
+const addSectionBtn = document.getElementById('addSectionBtn');
+const sectionsList = document.getElementById('sectionsList');
+
+const attDate = document.getElementById('attDate');
+const attSection = document.getElementById('attSection');
+const loadStudentsForAttendance = document.getElementById('loadStudentsForAttendance');
+const attendanceArea = document.getElementById('attendanceArea');
+const saveAttendanceBtn = document.getElementById('saveAttendanceBtn');
+const recordsList = document.getElementById('recordsList');
+
+const exportCsvBtn = document.getElementById('exportCsvBtn');
+const exportPdfBtn = document.getElementById('exportPdfBtn');
+
+const langSelect = document.getElementById('langSelect');
+const themeToggle = document.getElementById('themeToggle');
+const schoolNameInput = document.getElementById('schoolName');
+
+/* ---------------------------
+   UI: translations & navigation
+   --------------------------- */
+function applyTranslations(){
+  document.getElementById('lblStudent').innerText = t('student');
+  document.getElementById('lblSection').innerText = t('section');
+  document.getElementById('lblStudentName').innerText = t('student');
+  document.getElementById('lblManageStudents').innerText = t('manage_students');
+  document.getElementById('lblManageSections').innerText = t('manage_sections');
+  document.getElementById('lblSectionName').innerText = t('section');
+  document.getElementById('lblMarkAttendance').innerText = t('mark_attendance');
+  document.getElementById('lblDate').innerText = t('attendance');
+  document.getElementById('lblSectionSel').innerText = t('section');
+  document.getElementById('assignBtn').innerText = t('assign');
+  exportCsvBtn.innerText = t('export_csv');
+  exportPdfBtn.innerText = t('export_pdf');
+  addStudentBtn.innerText = t('add') || t('save');
+  addSectionBtn.innerText = t('add') || t('save');
+  studentNameInput.placeholder = t('student_name_ph');
+  sectionNameInput.placeholder = t('section_name_ph');
+}
+
+function showView(view){
+  viewHome.style.display = 'none';
+  viewStudents.style.display = 'none';
+  viewSections.style.display = 'none';
+  viewAttendance.style.display = 'none';
+  view.style.display = '';
+}
+navHome.addEventListener('click', ()=> { showView(viewHome); renderSummary(); });
+navStudents.addEventListener('click', ()=> { showView(viewStudents); renderStudents(); });
+navSections.addEventListener('click', ()=> { showView(viewSections); renderSections(); });
+navAttendance.addEventListener('click', ()=> { showView(viewAttendance); renderAttendancePage(); });
+
+/* ---------------------------
+   Students functions
+   --------------------------- */
+function addStudent(name){
+  name = (name||'').trim();
+  if(!name) return alert('Enter name');
+  const newSt = { id: uid('st'), name, sections: [] };
+  store.students.push(newSt);
+  writeStore(store);
+  studentNameInput.value = '';
+  renderStudents();
+  renderAssignOptions();
+  renderSummary();
+}
+addStudentBtn.addEventListener('click', ()=> addStudent(studentNameInput.value));
+
+function editStudent(id, newName){
+  const s = store.students.find(x=>x.id===id); if(!s) return;
+  s.name = newName;
+  writeStore(store); renderStudents(); renderAssignOptions(); renderSummary();
+}
+function deleteStudent(id){
+  if(!confirm('Delete student?')) return;
+  store.students = store.students.filter(x=>x.id!==id);
+  // remove from attendance
+  for(const k in store.attendance){ if(store.attendance[k] && store.attendance[k][id]) delete store.attendance[k][id]; }
+  writeStore(store);
+  renderStudents(); renderAssignOptions(); renderSummary();
+}
+function renderStudents(){
+  studentsList.innerHTML = '';
+  if(store.students.length===0){ studentsList.innerHTML = `<li class="muted">${t('no_students')}</li>`; return; }
+  store.students.forEach(s=>{
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <div style="display:flex;gap:8px;align-items:center">
+        <strong>${escapeHtml(s.name)}</strong>
+        <span class="muted small">${s.sections.join(', ') || ''}</span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn small" data-edit="${s.id}">Edit</button>
+        <button class="btn small" data-del="${s.id}" style="border-color:var(--danger);color:var(--danger)">Delete</button>
+      </div>
+    `;
+    studentsList.appendChild(li);
+  });
+  studentsList.querySelectorAll('[data-edit]').forEach(b=>{
+    b.addEventListener('click', (e)=>{
+      const id = e.currentTarget.getAttribute('data-edit');
+      const student = store.students.find(x=>x.id===id);
+      const newName = prompt('Edit name', student.name);
+      if(newName!==null) editStudent(id, newName.trim()||student.name);
+    });
+  });
+  studentsList.querySelectorAll('[data-del]').forEach(b=>{
+    b.addEventListener('click', (e)=>{
+      const id = e.currentTarget.getAttribute('data-del');
+      deleteStudent(id);
+    });
+  });
+}
+
+/* ---------------------------
+   Sections functions
+   --------------------------- */
+function addSection(name){
+  name = (name||'').trim();
+  if(!name) return alert('Enter section name');
+  const newSec = { id: uid('sec'), name };
+  store.sections.push(newSec);
+  writeStore(store);
+  sectionNameInput.value = '';
+  renderSections(); renderAssignOptions(); renderSummary();
+}
+addSectionBtn.addEventListener('click', ()=> addSection(sectionNameInput.value));
+
+function editSection(id, newName){
+  const s = store.sections.find(x=>x.id===id); if(!s) return;
+  const old = s.name;
+  s.name = newName;
+  // update assignments
+  store.students.forEach(st => {
+    st.sections = st.sections.map(sn => sn === old ? newName : sn);
+  });
+  writeStore(store); renderSections(); renderAssignOptions(); renderSummary();
+}
+function deleteSection(id){
+  if(!confirm('Delete section?')) return;
+  const sec = store.sections.find(x=>x.id===id); if(!sec) return;
+  store.sections = store.sections.filter(x=>x.id!==id);
+  store.students.forEach(st => st.sections = st.sections.filter(sn => sn !== sec.name));
+  writeStore(store); renderSections(); renderAssignOptions(); renderSummary();
+}
+function renderSections(){
+  sectionsList.innerHTML = '';
+  if(store.sections.length===0){ sectionsList.innerHTML = `<li class="muted">${t('no_sections')}</li>`; return; }
+  store.sections.forEach(s=>{
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <div style="display:flex;gap:8px;align-items:center">
+        <strong>${escapeHtml(s.name)}</strong>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn small" data-edit="${s.id}">Edit</button>
+        <button class="btn small" data-del="${s.id}" style="border-color:var(--danger);color:var(--danger)">Delete</button>
+      </div>
+    `;
+    sectionsList.appendChild(li);
+  });
+  sectionsList.querySelectorAll('[data-edit]').forEach(b=>{
+    b.addEventListener('click', (e)=>{
+      const id = e.currentTarget.getAttribute('data-edit');
+      const sec = store.sections.find(x=>x.id===id);
+      const newName = prompt('Edit section name', sec.name);
+      if(newName!==null) editSection(id, newName.trim()||sec.name);
+    });
+  });
+  sectionsList.querySelectorAll('[data-del]').forEach(b=>{
+    b.addEventListener('click', (e)=>{
+      const id = e.currentTarget.getAttribute('data-del');
+      deleteSection(id);
+    });
+  });
+}
+
+/* ---------------------------
+   Assignment UI
+   --------------------------- */
+function renderAssignOptions(){
+  selAssignStudent.innerHTML = '';
+  selAssignSection.innerHTML = '';
+  const optSt = document.createElement('option'); optSt.value=''; optSt.innerText='--'; selAssignStudent.appendChild(optSt);
+  const optSec = document.createElement('option'); optSec.value=''; optSec.innerText='--'; selAssignSection.appendChild(optSec);
+  store.students.forEach(s => { const o = document.createElement('option'); o.value = s.id; o.innerText = s.name; selAssignStudent.appendChild(o); });
+  store.sections.forEach(s => { const o = document.createElement('option'); o.value = s.id; o.innerText = s.name; selAssignSection.appendChild(o); });
+}
+assignBtn.addEventListener('click', ()=>{
+  const stId = selAssignStudent.value; const secId = selAssignSection.value;
+  if(!stId || !secId) return alert('Pick student and section');
+  const student = store.students.find(x=>x.id===stId);
+  const section = store.sections.find(x=>x.id===secId);
+  if(!student || !section) return;
+  if(!student.sections.includes(section.name)) student.sections.push(section.name);
+  writeStore(store); renderStudents(); renderAssignOptions(); renderSummary();
+});
+
+/* ---------------------------
+   Attendance UI & Logic
+   --------------------------- */
+function renderAttendancePage(){
+  applyTranslations();
+  attDate.value = (new Date()).toISOString().slice(0,10);
+  attSection.innerHTML = '';
+  const empty = document.createElement('option'); empty.value=''; empty.innerText='--'; attSection.appendChild(empty);
+  store.sections.forEach(s => {
+    const o = document.createElement('option'); o.value = s.name; o.innerText = s.name; attSection.appendChild(o);
+  });
+  renderRecordsList();
+  attendanceArea.innerHTML = `<div class="muted small">${t('loading')}</div>`;
+}
+
+loadStudentsForAttendance.addEventListener('click', ()=>{
+  const date = attDate.value;
+  const section = attSection.value;
+  if(!section) return alert(t('no_sections'));
+  const studentsIn = store.students.filter(s => s.sections.includes(section));
+  if(studentsIn.length===0) return attendanceArea.innerHTML = `<div class="muted">${t('no_students')}</div>`;
+  loadAttendanceForm(section, date);
+});
+
+function loadAttendanceForm(section, date){
+  const key = `${section}__${date||''}`;
+  const existing = store.attendance[key] || {};
+  attendanceArea.innerHTML = '';
+  const wrapper = document.createElement('div');
+  wrapper.className = 'grid';
+  store.students.filter(s => s.sections.includes(section)).forEach(s=>{
+    const id = s.id;
+    const current = existing[id]; // 'present'|'absent'|undefined
+    const row = document.createElement('div');
+    row.className = 'attendance-row';
+    row.innerHTML = `
+      <div style="display:flex;gap:10px;align-items:center">
+        <strong>${escapeHtml(s.name)}</strong>
+        <span class="muted small">${s.sections.join(', ')}</span>
+      </div>
+      <div class="att-controls">
+        <div title="${t('present')}" class="square present" data-st="${id}" data-val="present">${current==='present' ? '✓' : ''}</div>
+        <div title="${t('absent')}" class="square absent" data-st="${id}" data-val="absent">${current==='absent' ? '✕' : ''}</div>
+      </div>
+    `;
+    wrapper.appendChild(row);
+  });
+  attendanceArea.appendChild(wrapper);
+
+  // wire up mutual exclusivity: clicking a square toggles it on and flips the other off
+  attendanceArea.querySelectorAll('.square').forEach(el=>{
+    el.addEventListener('click', (e)=>{
+      const st = el.getAttribute('data-st');
+      const val = el.getAttribute('data-val'); // 'present' or 'absent'
+      const parent = el.closest('.attendance-row');
+      const other = parent.querySelector(`.square[data-st="${st}"][data-val="${val==='present'?'absent':'present'}"]`);
+      // toggle logic: if clicked is checked -> uncheck it; otherwise check clicked and uncheck other
+      const isChecked = el.classList.contains('checked');
+      if(isChecked){
+        el.classList.remove('checked');
+        el.innerText = '';
+      } else {
+        // set clicked
+        el.classList.add('checked');
+        el.innerText = val === 'present' ? '✓' : '✕';
+        // unset other
+        if(other){
+          other.classList.remove('checked');
+          other.innerText = '';
+        }
+      }
+    });
+  });
+}
+
+saveAttendanceBtn.addEventListener('click', ()=>{
+  const section = attSection.value;
+  const date = attDate.value;
+  if(!section || !date) return alert('Choose section and date first.');
+  const key = `${section}__${date}`;
+  const rec = {};
+  let allSelected = true;
+  attendanceArea.querySelectorAll('.attendance-row').forEach(row=>{
+    const stId = row.querySelector('.square').getAttribute('data-st');
+    const presentEl = row.querySelector('.square.present');
+    const absentEl = row.querySelector('.square.absent');
+    const presentChecked = presentEl.classList.contains('checked');
+    const absentChecked = absentEl.classList.contains('checked');
+    if(presentChecked) rec[stId] = 'present';
+    else if(absentChecked) rec[stId] = 'absent';
+    else allSelected = false;
+  });
+  if(!allSelected){
+    if(!confirm('Some students have no selection — save anyway? (Cancel to complete selections)')) {
+      return;
+    }
+  }
+  store.attendance[key] = rec;
+  writeStore(store);
+  renderRecordsList();
+  alert(t('attendance_saved'));
+});
+
+/* ---------------------------
+   Records list & exports
+   --------------------------- */
+function renderRecordsList(){
+  recordsList.innerHTML = '';
+  const keys = Object.keys(store.attendance).sort().reverse();
+  if(keys.length===0){ recordsList.innerHTML = `<li class="muted small">—</li>`; return; }
+  keys.forEach(k=>{
+    const [section, date] = k.split('__');
+    const li = document.createElement('li');
+    li.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center">
+      <div><strong>${escapeHtml(section)}</strong> <span class="muted small">${date}</span></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn small" data-key="${k}" data-export-csv>CSV</button>
+        <button class="btn small" data-key="${k}" data-export-pdf>PDF</button>
+      </div>
+    </div>`;
+    recordsList.appendChild(li);
+  });
+
+  recordsList.querySelectorAll('[data-export-csv]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      const key = e.currentTarget.getAttribute('data-key');
+      exportCsvForKey(key);
+    });
+  });
+  recordsList.querySelectorAll('[data-export-pdf]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      const key = e.currentTarget.getAttribute('data-key');
+      exportPdfForKey(key);
+    });
+  });
+}
+
+function exportCsvForKey(key){
+  const rec = store.attendance[key];
+  if(!rec) return alert('No record');
+  const [section,date] = key.split('__');
+  const rows = [['School','Section','Date','Student','Status']];
+  const school = (schoolNameInput.value||'').trim();
+  for(const sid in rec){
+    const st = store.students.find(s=>s.id===sid);
+    rows.push([school, section, date, st ? st.name : sid, rec[sid] || '']);
+  }
+  const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `attendance_${section}_${date}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function exportPdfForKey(key){
+  const rec = store.attendance[key];
+  if(!rec) return alert('No record');
+  const [section,date] = key.split('__');
+  const school = (schoolNameInput.value||'').trim() || 'Attendance Report';
+  // build rows for autoTable
+  const body = [];
+  for(const sid in rec){
+    const st = store.students.find(s=>s.id===sid);
+    const name = st ? st.name : sid;
+    const status = rec[sid] || '';
+    body.push([name, status]);
+  }
+
+  // jsPDF usage
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:'pt', format:'a4'});
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  // Header
+  doc.setFontSize(16);
+  doc.text(`${school}`, 40, 60);
+  doc.setFontSize(12);
+  doc.text(`Attendance Report — Section: ${section}`, 40, 82);
+  doc.text(`Date: ${date}`, 40, 100);
+  // table
+  doc.autoTable({
+    startY: 130,
+    head: [['Student', 'Status']],
+    body: body,
+    styles: {fontSize:11},
+    headStyles: {fillColor: [60,115,255]},
+    alternateRowStyles: {fillColor: [245,245,245]},
+    margin: {left: 40, right: 40},
+    columnStyles: {
+      0: {cellWidth: 320},
+      1: {cellWidth: 120}
+    }
+  });
+
+  doc.save(`attendance_${section}_${date}.pdf`);
+}
+
+/* quick export for currently selected */
+exportCsvBtn.addEventListener('click', ()=>{
+  const section = attSection.value; const date = attDate.value;
+  if(!section || !date) return alert('Choose section and date first.');
+  const key = `${section}__${date}`;
+  exportCsvForKey(key);
+});
+exportPdfBtn.addEventListener('click', ()=>{
+  const section = attSection.value; const date = attDate.value;
+  if(!section || !date) return alert('Choose section and date first.');
+  const key = `${section}__${date}`;
+  exportPdfForKey(key);
+});
+
+/* ---------------------------
+   Summary rendering
+   --------------------------- */
+function renderSummary(){
+  studentsSummary.innerHTML = '';
+  if(store.students.length===0){ studentsSummary.innerHTML = '<li class="muted">—</li>'; return; }
+  store.students.forEach(s=>{
+    const li = document.createElement('li');
+    li.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center">
+      <div><strong>${escapeHtml(s.name)}</strong> <span class="muted small">${s.sections.join(', ')}</span></div>
+      <div class="chip">${s.sections.length} ${t('sections')||'sections'}</div>
+    </div>`;
+    studentsSummary.appendChild(li);
+  });
+}
+
+/* ---------------------------
+   Theme & Language
+   --------------------------- */
+function applyTheme(){
+  const theme = store.settings.theme || 'light';
+  document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light');
+  themeToggle.innerText = theme === 'dark' ? 'Light' : 'Dark';
+}
+themeToggle.addEventListener('click', ()=>{
+  store.settings.theme = (store.settings.theme === 'dark') ? 'light' : 'dark';
+  writeStore(store); applyTheme();
+});
+langSelect.addEventListener('change', ()=>{
+  store.settings.lang = langSelect.value; writeStore(store); applyTranslations();
+});
+
+/* ---------------------------
+   Init
+   --------------------------- */
+function init(){
+  if(!store.settings.lang) store.settings.lang = 'en';
+  langSelect.value = store.settings.lang;
+  applyTranslations();
+  renderAssignOptions();
+  renderStudents();
+  renderSections();
+  renderSummary();
+  applyTheme();
+  showView(viewHome);
+  renderAttendancePage();
+}
+init();
+
+</script>
+</body>
+</html>
