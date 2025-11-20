@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Start Guide - Student Attendance System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #333;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4CAF50;
+        }
+        h3 {
+            color: #555;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .feature-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+        .feature-list li {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f5f5f5;
+            border-radius: 5px;
+            padding-left: 30px;
+            position: relative;
+        }
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 10px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .credentials {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #ff9800;
+        }
+        .credentials strong {
+            color: #856404;
+        }
+        .step {
+            background: #e3f2fd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #2196F3;
+        }
+        .button {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 10px 20px 0;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .button:hover {
+            background: #45a049;
+        }
+        .button.secondary {
+            background: #2196F3;
+        }
+        .button.secondary:hover {
+            background: #0b7dda;
+        }
+        .center {
+            text-align: center;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 Student Attendance System</h1>
+        <h2>Quick Start Guide</h2>
+        
+        <div class="center">
+            <a href="index.html" class="button">Launch System</a>
+            <a href="README.md" class="button secondary" target="_blank">View Full Documentation</a>
+        </div>
+
+        <div class="credentials">
+            <h3>🔐 Default Login Credentials</h3>
+            <p><strong>Username:</strong> admin</p>
+            <p><strong>Password:</strong> admin123</p>
+        </div>
+
+        <h2>🚀 Getting Started (3 Easy Steps)</h2>
+        
+        <div class="step">
+            <h3>Step 1: Launch the System</h3>
+            <p>Click the "Launch System" button above or open <code>index.html</code> in your browser</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Login</h3>
+            <p>Use the credentials above to access the admin dashboard</p>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Start Managing</h3>
+            <p>Navigate through the menu to manage students, sections, and attendance</p>
+        </div>
+
+        <h2>✨ Key Features</h2>
+        <ul class="feature-list">
+            <li>Complete student management with add, edit, delete</li>
+            <li>Section/class organization system</li>
+            <li>Daily attendance tracking with 4 status types</li>
+            <li>Automatic attendance percentage calculation</li>
+            <li>Comprehensive reports with date range filtering</li>
+            <li>CSV import/export functionality</li>
+            <li>Real-time dashboard with statistics</li>
+            <li>Search and filter capabilities</li>
+        </ul>
+
+        <h2>📋 Main Sections</h2>
+        
+        <h3>Dashboard</h3>
+        <p>View overall statistics, recent attendance, and quick access to all features.</p>
+
+        <h3>Students</h3>
+        <p>Add, edit, delete, search students. Import bulk students from CSV or export to CSV.</p>
+
+        <h3>Sections</h3>
+        <p>Create and manage different sections (Art, Sports, Science, etc.). Each section has a unique code.</p>
+
+        <h3>Attendance</h3>
+        <p>Mark daily attendance for students by section. Four statuses available:</p>
+        <ul class="feature-list">
+            <li><strong>Present:</strong> Student attended</li>
+            <li><strong>Absent:</strong> Student did not attend</li>
+            <li><strong>Late:</strong> Student arrived late</li>
+            <li><strong>Excused:</strong> Student has valid excuse</li>
+        </ul>
+
+        <h3>Reports</h3>
+        <p>Generate detailed attendance reports filtered by section and date range. Export reports to CSV.</p>
+
+        <h2>📊 Sample Data Included</h2>
+        <p>The system comes with pre-loaded sample data:</p>
+        <ul class="feature-list">
+            <li>4 Sections: Art, Sports, Science, Mathematics</li>
+            <li>4 Sample Students</li>
+        </ul>
+        <p>You can modify or delete this data as needed.</p>
+
+        <h2>💾 Data Storage</h2>
+        <p>All data is stored locally in your browser's localStorage. Your data persists between sessions but will be cleared if you clear your browser data.</p>
+
+        <h2>📥 Import Students from CSV</h2>
+        <p>Use the provided <code>sample_students.csv</code> file as a template. CSV format:</p>
+        <code>Full Name,Section Code,Grade Level,Contact Info</code>
+
+        <h2>🔧 System Requirements</h2>
+        <ul class="feature-list">
+            <li>Modern web browser (Chrome, Firefox, Edge, Safari)</li>
+            <li>JavaScript enabled</li>
+            <li>Local storage support</li>
+            <li>No internet connection required</li>
+            <li>No installation needed</li>
+        </ul>
+
+        <h2>❓ Troubleshooting</h2>
+        <h3>Can't login?</h3>
+        <p>Make sure you're using <code>admin</code> and <code>admin123</code> (case-sensitive)</p>
+
+        <h3>Data not saving?</h3>
+        <p>Ensure localStorage is enabled and you're not in private/incognito mode</p>
+
+        <h3>Display issues?</h3>
+        <p>Try refreshing the page (F5) or using a different browser</p>
+
+        <h2>📱 Responsive Design</h2>
+        <p>The system works on desktop, tablet, and mobile devices. For best experience, use a screen resolution of 1280x720 or higher.</p>
+
+        <div class="center" style="margin-top: 40px;">
+            <a href="index.html" class="button">Start Using the System Now →</a>
+        </div>
+
+        <hr style="margin: 40px 0; border: none; border-top: 1px solid #ddd;">
+        
+        <p style="text-align: center; color: #666;">
+            <small>Student Attendance and Section Management System v1.0<br>
+            All data is stored locally in your browser</small>
+        </p>
+    </div>
+</body>
+</html>

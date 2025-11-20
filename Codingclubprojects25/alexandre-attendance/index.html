@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance & Section Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <h1><i class="fas fa-graduation-cap"></i> Student Management System</h1>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <p class="login-hint">Default: admin / admin123</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="main-app" style="display: none;">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <h1><i class="fas fa-graduation-cap"></i> Student Management System</h1>
+            </div>
+            <div class="header-right">
+                <span class="admin-name"><i class="fas fa-user"></i> Admin</span>
+                <button id="logoutBtn" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="app-nav">
+            <button class="nav-btn active" data-page="dashboard">
+                <i class="fas fa-chart-line"></i> Dashboard
+            </button>
+            <button class="nav-btn" data-page="students">
+                <i class="fas fa-user-graduate"></i> Students
+            </button>
+            <button class="nav-btn" data-page="sections">
+                <i class="fas fa-layer-group"></i> Sections
+            </button>
+            <button class="nav-btn" data-page="attendance">
+                <i class="fas fa-clipboard-check"></i> Attendance
+            </button>
+            <button class="nav-btn" data-page="reports">
+                <i class="fas fa-chart-bar"></i> Reports
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="app-content">
+            <!-- Dashboard Page -->
+            <div id="dashboardPage" class="page active">
+                <h2>Dashboard Overview</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalStudents">0</h3>
+                            <p>Total Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalSections">0</h3>
+                            <p>Total Sections</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="avgAttendance">0%</h3>
+                            <p>Average Attendance</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="todayDate"></h3>
+                            <p>Today's Date</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-section">
+                        <h3>Recent Attendance</h3>
+                        <div id="recentAttendance" class="attendance-list"></div>
+                    </div>
+                    <div class="dashboard-section">
+                        <h3>Sections Overview</h3>
+                        <div id="sectionsOverview" class="sections-list"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Students Page -->
+            <div id="studentsPage" class="page">
+                <div class="page-header">
+                    <h2>Student Management</h2>
+                    <div class="page-actions">
+                        <input type="text" id="studentSearch" placeholder="Search students..." class="search-input">
+                        <button id="addStudentBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Student
+                        </button>
+                        <button id="importStudentsBtn" class="btn btn-secondary">
+                            <i class="fas fa-file-import"></i> Import CSV
+                        </button>
+                        <button id="exportStudentsBtn" class="btn btn-secondary">
+                            <i class="fas fa-file-export"></i> Export CSV
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="studentsTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Full Name</th>
+                                <th>Section</th>
+                                <th>Grade Level</th>
+                                <th>Contact Info</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Sections Page -->
+            <div id="sectionsPage" class="page">
+                <div class="page-header">
+                    <h2>Section Management</h2>
+                    <div class="page-actions">
+                        <input type="text" id="sectionSearch" placeholder="Search sections..." class="search-input">
+                        <button id="addSectionBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Section
+                        </button>
+                    </div>
+                </div>
+                <div class="sections-grid" id="sectionsGrid"></div>
+            </div>
+
+            <!-- Attendance Page -->
+            <div id="attendancePage" class="page">
+                <div class="page-header">
+                    <h2>Attendance Tracking</h2>
+                    <div class="page-actions">
+                        <select id="attendanceSection" class="form-control">
+                            <option value="">Select Section</option>
+                        </select>
+                        <input type="date" id="attendanceDate" class="form-control">
+                        <button id="markAttendanceBtn" class="btn btn-primary">
+                            <i class="fas fa-check"></i> Mark Attendance
+                        </button>
+                    </div>
+                </div>
+                <div id="attendanceContent" class="attendance-content"></div>
+            </div>
+
+            <!-- Reports Page -->
+            <div id="reportsPage" class="page">
+                <div class="page-header">
+                    <h2>Reports & Analytics</h2>
+                </div>
+                <div class="reports-filters">
+                    <div class="form-group">
+                        <label>Filter by Section:</label>
+                        <select id="reportSection" class="form-control">
+                            <option value="">All Sections</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Start Date:</label>
+                        <input type="date" id="reportStartDate" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date:</label>
+                        <input type="date" id="reportEndDate" class="form-control">
+                    </div>
+                    <button id="generateReportBtn" class="btn btn-primary">
+                        <i class="fas fa-chart-bar"></i> Generate Report
+                    </button>
+                    <button id="exportReportBtn" class="btn btn-secondary">
+                        <i class="fas fa-file-download"></i> Export to CSV
+                    </button>
+                </div>
+                <div id="reportContent" class="report-content"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Student Modal -->
+    <div id="studentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="studentModalTitle">Add Student</h3>
+                <span class="close" data-modal="studentModal">&times;</span>
+            </div>
+            <form id="studentForm">
+                <input type="hidden" id="studentId">
+                <div class="form-group">
+                    <label for="studentName">Full Name *</label>
+                    <input type="text" id="studentName" required>
+                </div>
+                <div class="form-group">
+                    <label for="studentSection">Section *</label>
+                    <select id="studentSection" required>
+                        <option value="">Select Section</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="studentGrade">Grade Level *</label>
+                    <input type="text" id="studentGrade" required>
+                </div>
+                <div class="form-group">
+                    <label for="studentContact">Contact Info</label>
+                    <input type="text" id="studentContact">
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-modal="studentModal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Section Modal -->
+    <div id="sectionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="sectionModalTitle">Add Section</h3>
+                <span class="close" data-modal="sectionModal">&times;</span>
+            </div>
+            <form id="sectionForm">
+                <input type="hidden" id="sectionId">
+                <div class="form-group">
+                    <label for="sectionName">Section Name *</label>
+                    <input type="text" id="sectionName" required>
+                </div>
+                <div class="form-group">
+                    <label for="sectionCode">Section Code *</label>
+                    <input type="text" id="sectionCode" required>
+                </div>
+                <div class="form-group">
+                    <label for="sectionDescription">Description</label>
+                    <textarea id="sectionDescription" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary" data-modal="sectionModal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Import CSV Modal -->
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Import Students from CSV</h3>
+                <span class="close" data-modal="importModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Upload a CSV file with the following format:</p>
+                <code>Full Name,Section Code,Grade Level,Contact Info</code>
+                <div class="form-group">
+                    <input type="file" id="csvFileInput" accept=".csv">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="uploadCsvBtn" class="btn btn-primary">Upload</button>
+                <button type="button" class="btn btn-secondary" data-modal="importModal">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
