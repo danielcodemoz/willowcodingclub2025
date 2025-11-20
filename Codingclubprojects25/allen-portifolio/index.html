@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - Allen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #1e40af;
+            --accent-color: #f59e0b;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --border-color: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #60a5fa;
+            --secondary-color: #3b82f6;
+            --accent-color: #fbbf24;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --bg-tertiary: #374151;
+            --border-color: #4b5563;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .theme-toggle, .language-switcher {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .theme-toggle:hover, .language-switcher:hover {
+            background: var(--bg-tertiary);
+            transform: translateY(-2px);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .section h2 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+
+        .field-group {
+            margin-bottom: 20px;
+        }
+
+        .field-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .editable-field {
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 16px;
+            width: 100%;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: text;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        .editable-field:hover {
+            border-color: var(--primary-color);
+        }
+
+        .editable-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .editable-field[contenteditable="true"] {
+            background: var(--bg-tertiary);
+            border-color: var(--primary-color);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .social-link:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .project-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .project-item:hover {
+            border-color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .project-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .add-project-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .add-project-btn:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+        }
+
+        .certification-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .certification-item:hover {
+            border-color: var(--accent-color);
+        }
+
+        .certification-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .certification-issuer {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .add-certification-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .add-certification-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .remove-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .remove-btn:hover {
+            background: #dc2626;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .controls {
+                justify-content: center;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+
+            .section {
+                padding: 15px;
+            }
+        }
+
+        /* Animation for theme switching */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Language flags */
+        .flag {
+            width: 20px;
+            height: 15px;
+            margin-right: 8px;
+            border-radius: 2px;
+        }
+
+        .flag.en { background: linear-gradient(to bottom, #012169 0%, #012169 50%, #ffffff 50%, #ffffff 100%); }
+        .flag.pt { background: linear-gradient(to bottom, #006600 0%, #006600 50%, #ffcc00 50%, #ffcc00 100%); }
+        .flag.es { background: linear-gradient(to bottom, #c60b1e 0%, #c60b1e 50%, #ffc400 50%, #ffc400 100%); }
+        .flag.fr { background: linear-gradient(to right, #002395 0%, #002395 33%, #ffffff 33%, #ffffff 66%, #ed2939 66%, #ed2939 100%); }
+        .flag.de { background: linear-gradient(to bottom, #000000 0%, #000000 33%, #dd0000 33%, #dd0000 66%, #ffce00 66%, #ffce00 100%); }
+        .flag.it { background: linear-gradient(to right, #009246 0%, #009246 33%, #ffffff 33%, #ffffff 66%, #ce2b37 66%, #ce2b37 100%); }
+        .flag.ja { background: #ffffff; border: 1px solid #e5e7eb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">Portfolio</div>
+            <div class="controls">
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <span id="theme-icon">🌙</span>
+                    <span id="theme-text">Dark Mode</span>
+                </button>
+                <select class="language-switcher" onchange="changeLanguage(this.value)">
+                    <option value="en" data-flag="en">🇺🇸 EN</option>
+                    <option value="pt" data-flag="pt">🇵🇹 PT</option>
+                    <option value="es" data-flag="es">🇪🇸 ES</option>
+                    <option value="fr" data-flag="fr">🇫🇷 FR</option>
+                    <option value="de" data-flag="de">🇩🇪 DE</option>
+                    <option value="it" data-flag="it">🇮🇹 IT</option>
+                    <option value="ja" data-flag="ja">🇯🇵 JA</option>
+                </select>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Section 1: Profile -->
+            <section class="section">
+                <h2 data-translate="profile">Profile</h2>
+                
+                <div class="field-group">
+                    <label class="field-label" data-translate="name">Name</label>
+                    <div class="editable-field" contenteditable="true" data-field="name">Allen Smith</div>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label" data-translate="title">Title</label>
+                    <div class="editable-field" contenteditable="true" data-field="title">Full Stack Developer</div>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label" data-translate="bio">Short Bio</label>
+                    <div class="editable-field" contenteditable="true" data-field="bio">Passionate developer with expertise in modern web technologies and a love for creating user-friendly applications.</div>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label" data-translate="social">Social Media</label>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="#" class="social-link">
+                            <span>GitHub</span>
+                        </a>
+                        <a href="#" class="social-link">
+                            <span>Twitter</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Academic & Professional -->
+            <section class="section">
+                <h2 data-translate="academic">Academic & Professional</h2>
+                
+                <div class="field-group">
+                    <label class="field-label" data-translate="education">Education</label>
+                    <div class="editable-field" contenteditable="true" data-field="education">Bachelor of Computer Science - University of Technology</div>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label" data-translate="certifications">Certifications</label>
+                    <div id="certifications-container">
+                        <div class="certification-item">
+                            <div class="certification-title">AWS Certified Developer</div>
+                            <div class="certification-issuer">Amazon Web Services</div>
+                            <button class="remove-btn" onclick="removeCertification(this)">×</button>
+                        </div>
+                        <div class="certification-item">
+                            <div class="certification-title">Microsoft Azure Developer</div>
+                            <div class="certification-issuer">Microsoft</div>
+                            <button class="remove-btn" onclick="removeCertification(this)">×</button>
+                        </div>
+                    </div>
+                    <button class="add-certification-btn" onclick="addCertification()" data-translate="add-certification">Add Certification</button>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label" data-translate="awards">Key Awards</label>
+                    <div class="editable-field" contenteditable="true" data-field="awards">Best Developer Award 2023, Innovation Excellence Prize</div>
+                </div>
+            </section>
+
+            <!-- Section 3: IT Projects -->
+            <section class="section">
+                <h2 data-translate="projects">IT Projects</h2>
+                
+                <div id="projects-container">
+                    <div class="project-item">
+                        <div class="project-title editable-field" contenteditable="true" data-field="project-title-1">E-Commerce Platform</div>
+                        <div class="project-description editable-field" contenteditable="true" data-field="project-desc-1">A full-stack e-commerce solution built with React, Node.js, and MongoDB. Features include user authentication, payment processing, and admin dashboard.</div>
+                        <button class="remove-btn" onclick="removeProject(this)">×</button>
+                    </div>
+                    
+                    <div class="project-item">
+                        <div class="project-title editable-field" contenteditable="true" data-field="project-title-2">Task Management App</div>
+                        <div class="project-description editable-field" contenteditable="true" data-field="project-desc-2">A collaborative task management application with real-time updates, team collaboration features, and progress tracking.</div>
+                        <button class="remove-btn" onclick="removeProject(this)">×</button>
+                    </div>
+                </div>
+                
+                <button class="add-project-btn" onclick="addProject()" data-translate="add-project">Add New Project</button>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p data-translate="footer">© 2024 Portfolio. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Language translations
+        const translations = {
+            en: {
+                profile: "Profile",
+                name: "Name",
+                title: "Title",
+                bio: "Short Bio",
+                social: "Social Media",
+                academic: "Academic & Professional",
+                education: "Education",
+                certifications: "Certifications",
+                awards: "Key Awards",
+                projects: "IT Projects",
+                "add-project": "Add New Project",
+                "add-certification": "Add Certification",
+                footer: "© 2024 Portfolio. All rights reserved.",
+                "dark-mode": "Dark Mode",
+                "light-mode": "Light Mode"
+            },
+            pt: {
+                profile: "Perfil",
+                name: "Nome",
+                title: "Título",
+                bio: "Biografia Curta",
+                social: "Redes Sociais",
+                academic: "Acadêmico e Profissional",
+                education: "Educação",
+                certifications: "Certificações",
+                awards: "Prêmios Principais",
+                projects: "Projetos de TI",
+                "add-project": "Adicionar Novo Projeto",
+                "add-certification": "Adicionar Certificação",
+                footer: "© 2024 Portfólio. Todos os direitos reservados.",
+                "dark-mode": "Modo Escuro",
+                "light-mode": "Modo Claro"
+            },
+            es: {
+                profile: "Perfil",
+                name: "Nombre",
+                title: "Título",
+                bio: "Biografía Corta",
+                social: "Redes Sociales",
+                academic: "Académico y Profesional",
+                education: "Educación",
+                certifications: "Certificaciones",
+                awards: "Premios Principales",
+                projects: "Proyectos de TI",
+                "add-project": "Agregar Nuevo Proyecto",
+                "add-certification": "Agregar Certificación",
+                footer: "© 2024 Portafolio. Todos los derechos reservados.",
+                "dark-mode": "Modo Oscuro",
+                "light-mode": "Modo Claro"
+            },
+            fr: {
+                profile: "Profil",
+                name: "Nom",
+                title: "Titre",
+                bio: "Biographie Courte",
+                social: "Réseaux Sociaux",
+                academic: "Académique et Professionnel",
+                education: "Éducation",
+                certifications: "Certifications",
+                awards: "Prix Principaux",
+                projects: "Projets IT",
+                "add-project": "Ajouter un Nouveau Projet",
+                "add-certification": "Ajouter une Certification",
+                footer: "© 2024 Portfolio. Tous droits réservés.",
+                "dark-mode": "Mode Sombre",
+                "light-mode": "Mode Clair"
+            },
+            de: {
+                profile: "Profil",
+                name: "Name",
+                title: "Titel",
+                bio: "Kurze Biografie",
+                social: "Soziale Medien",
+                academic: "Akademisch und Berufsleben",
+                education: "Ausbildung",
+                certifications: "Zertifizierungen",
+                awards: "Hauptpreise",
+                projects: "IT-Projekte",
+                "add-project": "Neues Projekt Hinzufügen",
+                "add-certification": "Zertifizierung Hinzufügen",
+                footer: "© 2024 Portfolio. Alle Rechte vorbehalten.",
+                "dark-mode": "Dunkler Modus",
+                "light-mode": "Heller Modus"
+            },
+            it: {
+                profile: "Profilo",
+                name: "Nome",
+                title: "Titolo",
+                bio: "Biografia Breve",
+                social: "Social Media",
+                academic: "Accademico e Professionale",
+                education: "Educazione",
+                certifications: "Certificazioni",
+                awards: "Premi Principali",
+                projects: "Progetti IT",
+                "add-project": "Aggiungi Nuovo Progetto",
+                "add-certification": "Aggiungi Certificazione",
+                footer: "© 2024 Portfolio. Tutti i diritti riservati.",
+                "dark-mode": "Modalità Scura",
+                "light-mode": "Modalità Chiara"
+            },
+            ja: {
+                profile: "プロフィール",
+                name: "名前",
+                title: "タイトル",
+                bio: "短い自己紹介",
+                social: "ソーシャルメディア",
+                academic: "学術・専門",
+                education: "教育",
+                certifications: "資格",
+                awards: "主要な受賞",
+                projects: "ITプロジェクト",
+                "add-project": "新しいプロジェクトを追加",
+                "add-certification": "資格を追加",
+                footer: "© 2024 ポートフォリオ. 全著作権所有.",
+                "dark-mode": "ダークモード",
+                "light-mode": "ライトモード"
+            }
+        };
+
+        let currentLanguage = 'en';
+        let isDarkMode = false;
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            loadLanguage();
+            setupEditableFields();
+            addFadeInAnimation();
+        });
+
+        // Theme toggle functionality
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+            
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            
+            if (isDarkMode) {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = getTranslation('light-mode');
+            } else {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = getTranslation('dark-mode');
+            }
+            
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        }
+
+        // Language change functionality
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            updateAllTexts();
+            localStorage.setItem('language', lang);
+        }
+
+        // Get translation for current language
+        function getTranslation(key) {
+            return translations[currentLanguage][key] || translations.en[key] || key;
+        }
+
+        // Update all translatable text on the page
+        function updateAllTexts() {
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                element.textContent = getTranslation(key);
+            });
+        }
+
+        // Load saved theme from localStorage
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                isDarkMode = true;
+                document.body.setAttribute('data-theme', 'dark');
+                document.getElementById('theme-icon').textContent = '☀️';
+                document.getElementById('theme-text').textContent = getTranslation('light-mode');
+            }
+        }
+
+        // Load saved language from localStorage
+        function loadLanguage() {
+            const savedLanguage = localStorage.getItem('language');
+            if (savedLanguage && translations[savedLanguage]) {
+                currentLanguage = savedLanguage;
+                document.querySelector('.language-switcher').value = savedLanguage;
+                updateAllTexts();
+            }
+        }
+
+        // Setup editable fields
+        function setupEditableFields() {
+            const editableFields = document.querySelectorAll('.editable-field');
+            editableFields.forEach(field => {
+                field.addEventListener('blur', function() {
+                    saveFieldContent(this);
+                });
+                
+                field.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.blur();
+                    }
+                });
+            });
+        }
+
+        // Save field content to localStorage
+        function saveFieldContent(field) {
+            const fieldName = field.getAttribute('data-field');
+            const content = field.textContent;
+            localStorage.setItem(`portfolio_${fieldName}`, content);
+        }
+
+        // Load saved field content from localStorage
+        function loadFieldContent() {
+            const editableFields = document.querySelectorAll('.editable-field');
+            editableFields.forEach(field => {
+                const fieldName = field.getAttribute('data-field');
+                const savedContent = localStorage.getItem(`portfolio_${fieldName}`);
+                if (savedContent) {
+                    field.textContent = savedContent;
+                }
+            });
+        }
+
+        // Add new project
+        function addProject() {
+            const container = document.getElementById('projects-container');
+            const projectCount = container.children.length + 1;
+            
+            const projectDiv = document.createElement('div');
+            projectDiv.className = 'project-item fade-in';
+            projectDiv.innerHTML = `
+                <div class="project-title editable-field" contenteditable="true" data-field="project-title-${projectCount}">New Project</div>
+                <div class="project-description editable-field" contenteditable="true" data-field="project-desc-${projectCount}">Project description goes here...</div>
+                <button class="remove-btn" onclick="removeProject(this)">×</button>
+            `;
+            
+            container.appendChild(projectDiv);
+            setupEditableFields();
+        }
+
+        // Remove project
+        function removeProject(button) {
+            const projectItem = button.parentElement;
+            projectItem.style.opacity = '0';
+            projectItem.style.transform = 'translateX(-20px)';
+            setTimeout(() => {
+                projectItem.remove();
+            }, 300);
+        }
+
+        // Add new certification
+        function addCertification() {
+            const container = document.getElementById('certifications-container');
+            const certDiv = document.createElement('div');
+            certDiv.className = 'certification-item fade-in';
+            certDiv.innerHTML = `
+                <div class="certification-title">New Certification</div>
+                <div class="certification-issuer">Issuing Organization</div>
+                <button class="remove-btn" onclick="removeCertification(this)">×</button>
+            `;
+            
+            container.appendChild(certDiv);
+        }
+
+        // Remove certification
+        function removeCertification(button) {
+            const certItem = button.parentElement;
+            certItem.style.opacity = '0';
+            certItem.style.transform = 'translateX(-20px)';
+            setTimeout(() => {
+                certItem.remove();
+            }, 300);
+        }
+
+        // Add fade-in animation to new elements
+        function addFadeInAnimation() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            });
+
+            document.querySelectorAll('.section').forEach(section => {
+                observer.observe(section);
+            });
+        }
+
+        // Load saved content when page loads
+        window.addEventListener('load', loadFieldContent);
+    </script>
+</body>
+</html>

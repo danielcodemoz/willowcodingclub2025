@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        :root {
+            --bg-color: #f8faff;
+            --container-bg-color: #ffffff;
+            --heading-color: #2c3e50;
+            --board-border-color: #3498db;
+            --cell-bg-color: #ecf0f1;
+            --cell-border-color: #bdc3c7;
+            --cell-text-color: #2c3e50;
+            --cell-hover-bg-color: #dbe4e6;
+            --status-text-color: #34495e;
+            --button-bg-color: #3498db;
+            --button-hover-bg-color: #2980b9;
+        }
+
+        /* Dark Theme */
+        .theme-dark {
+            --bg-color: #2c3e50;
+            --container-bg-color: #34495e;
+            --heading-color: #ecf0f1;
+            --board-border-color: #95a5a6;
+            --cell-bg-color: #7f8c8d;
+            --cell-border-color: #bdc3c7;
+            --cell-text-color: #ecf0f1;
+            --cell-hover-bg-color: #616a6b;
+            --status-text-color: #ecf0f1;
+            --button-bg-color: #95a5a6;
+            --button-hover-bg-color: #7f8c8d;
+        }
+
+        /* Forest Theme */
+        .theme-forest {
+            --bg-color: #d4edda;
+            --container-bg-color: #ffffff;
+            --heading-color: #28a745;
+            --board-border-color: #28a745;
+            --cell-bg-color: #e6ffe6;
+            --cell-border-color: #5cb85c;
+            --cell-text-color: #28a745;
+            --cell-hover-bg-color: #c3e6cb;
+            --status-text-color: #218838;
+            --button-bg-color: #28a745;
+            --button-hover-bg-color: #218838;
+        }
+
+        /* Ocean Theme */
+        .theme-ocean {
+            --bg-color: #e0f7fa;
+            --container-bg-color: #ffffff;
+            --heading-color: #007bff;
+            --board-border-color: #007bff;
+            --cell-bg-color: #e6f7ff;
+            --cell-border-color: #00aced;
+            --cell-text-color: #007bff;
+            --cell-hover-bg-color: #b3e5fc;
+            --status-text-color: #0056b3;
+            --button-bg-color: #007bff;
+            --button-hover-bg-color: #0056b3;
+        }
+
+        /* Purple Theme */
+        .theme-purple {
+            --bg-color: #f3e5f5;
+            --container-bg-color: #ffffff;
+            --heading-color: #673ab7;
+            --board-border-color: #673ab7;
+            --cell-bg-color: #ede7f6;
+            --cell-border-color: #9575cd;
+            --cell-text-color: #673ab7;
+            --cell-hover-bg-color: #d1c4e9;
+            --status-text-color: #512da8;
+            --button-bg-color: #673ab7;
+            --button-hover-bg-color: #5e35b1;
+        }
+
+        /* Retro Theme */
+        .theme-retro {
+            --bg-color: #222222;
+            --container-bg-color: #333333;
+            --heading-color: #00ff00;
+            --board-border-color: #ff00ff;
+            --cell-bg-color: #555555;
+            --cell-border-color: #ffff00;
+            --cell-text-color: #00ff00;
+            --cell-hover-bg-color: #777777;
+            --status-text-color: #ffff00;
+            --button-bg-color: #00ffff;
+            --button-hover-bg-color: #00cccc;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: var(--bg-color);
+            transition: background-color 0.4s ease-in-out;
+        }
+
+        .game-container, .main-menu-container {
+            background-color: var(--container-bg-color);
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: background-color 0.4s ease-in-out;
+        }
+
+        h1 {
+            color: var(--heading-color);
+            font-size: 3em;
+            margin-bottom: 30px;
+            transition: color 0.4s ease-in-out;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            grid-template-rows: repeat(3, 120px);
+            gap: 10px;
+            margin: 35px auto;
+            width: 380px; /* 3*120px + 2*10px */
+            height: 380px; /* 3*120px + 2*10px */
+            border: 5px solid var(--board-border-color);
+            border-radius: 10px;
+            transition: border-color 0.4s ease-in-out;
+        }
+
+        .cell {
+            width: 120px;
+            height: 120px;
+            background-color: var(--cell-bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4.5em;
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--cell-text-color);
+            border: 3px solid var(--cell-border-color);
+            border-radius: 8px;
+            transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out, transform 0.1s ease-out;
+        }
+
+        .cell:hover {
+            background-color: var(--cell-hover-bg-color);
+            transform: scale(1.05); /* Slightly more zoom on hover */
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .cell.clicked {
+            animation: cellClick 0.2s ease-out;
+        }
+
+        @keyframes cellClick {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.85); }
+            100% { transform: scale(1); }
+        }
+
+        .winning-cell {
+            background-color: #ffcc80 !important; /* Softer yellow highlight */
+            color: #ff9800 !important; /* Orangeish yellow for text */
+            animation: winAnimation 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes winAnimation {
+            from { transform: scale(1); border-color: #ff9800; }
+            to { transform: scale(1.1); border-color: #ffcc80; }
+        }
+
+        .status {
+            margin-top: 35px;
+            font-size: 2em;
+            color: var(--status-text-color);
+            font-weight: bold;
+            transition: color 0.4s ease-in-out;
+        }
+
+        button {
+            padding: 15px 32px;
+            font-size: 1.3em;
+            background-color: var(--button-bg-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 35px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        button:hover {
+            background-color: var(--button-hover-bg-color);
+            transform: translateY(-4px); /* More lift on hover */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .game-mode-selection button,
+        .difficulty-selection button,
+        .theme-selection button,
+        .shape-selection button {
+            margin-top: 15px; /* Adjust margin for grouped buttons */
+        }
+
+        .main-menu-container button {
+            margin-top: 20px; /* Adjust margin for main menu buttons */
+        }
+    </style>
+</head>
+<body>
+    <div class="main-menu-container" id="mainMenu">
+        <h1>Welcome to Tic Tac Toe!</h1>
+        <button id="adventureModeButton" style="margin-bottom: 10px;">Adventure Mode</button>
+        <button id="normalPlayButton">Normal Play</button>
+    </div>
+
+    <div class="game-container" id="gameContainer" style="display: none;">
+        <h1>Tic Tac Toe</h1>
+        <div class="board" id="gameBoard">
+            <div class="cell" data-cell-index="0"></div>
+            <div class="cell" data-cell-index="1"></div>
+            <div class="cell" data-cell-index="2"></div>
+            <div class="cell" data-cell-index="3"></div>
+            <div class="cell" data-cell-index="4"></div>
+            <div class="cell" data-cell-index="5"></div>
+            <div class="cell" data-cell-index="6"></div>
+            <div class="cell" data-cell-index="7"></div>
+            <div class="cell" data-cell-index="8"></div>
+        </div>
+        <div class="status" id="gameStatus"></div>
+
+        <div class="adventure-status" id="adventureStatus" style="margin-top: 10px; display: none; font-weight: bold;">
+            Level: <span id="currentLevelDisplay">1</span> | Wins: <span id="gamesWonDisplay">0</span>
+        </div>
+
+        <div class="game-mode-selection" style="margin-top: 20px;">
+            <button id="pvpModeButton" style="margin-right: 10px;">Player vs Player</button>
+            <button id="pvcModeButton">Player vs Computer</button>
+        </div>
+
+        <div class="difficulty-selection" style="margin-top: 15px; display: none;" id="difficultySelection">
+            <button id="easyButton" style="margin-right: 10px;">Easy</button>
+            <button id="mediumButton" style="margin-right: 10px;">Medium</button>
+            <button id="hardButton">Hard</button>
+        </div>
+
+        <button id="restartButton" style="margin-top: 25px;">Restart Game</button>
+
+        <div class="shape-selection" style="margin-top: 20px;">
+            <button id="defaultShapesButton" style="margin-right: 10px;">X / O</button>
+            <button id="animalShapesButton" style="margin-right: 10px;">Animals</button>
+            <button id="symbolShapesButton">Symbols</button>
+        </div>
+
+        <div class="theme-selection" style="margin-top: 20px;">
+            <button id="defaultThemeButton" style="margin-right: 10px;">Default Theme</button>
+            <button id="darkThemeButton" style="margin-right: 10px;">Dark Theme</button>
+            <button id="forestThemeButton" style="margin-right: 10px;">Forest Theme</button>
+            <button id="oceanThemeButton" style="margin-right: 10px;">Ocean Theme</button>
+            <button id="purpleThemeButton" style="margin-right: 10px;">Purple Theme</button>
+            <button id="retroThemeButton">Retro Theme</button>
+        </div>
+    </div>
+
+    <script>
+        const gameBoard = document.getElementById('gameBoard');
+        const gameStatus = document.getElementById('gameStatus');
+        const restartButton = document.getElementById('restartButton');
+        const cells = document.querySelectorAll('.cell');
+        const pvpModeButton = document.getElementById('pvpModeButton');
+        const pvcModeButton = document.getElementById('pvcModeButton');
+        const difficultySelection = document.getElementById('difficultySelection');
+        const easyButton = document.getElementById('easyButton');
+        const mediumButton = document.getElementById('mediumButton');
+        const hardButton = document.getElementById('hardButton');
+        const defaultThemeButton = document.getElementById('defaultThemeButton');
+        const darkThemeButton = document.getElementById('darkThemeButton');
+        const forestThemeButton = document.getElementById('forestThemeButton');
+        const oceanThemeButton = document.getElementById('oceanThemeButton');
+        const purpleThemeButton = document.getElementById('purpleThemeButton');
+        const retroThemeButton = document.getElementById('retroThemeButton');
+
+        const mainMenu = document.getElementById('mainMenu');
+        const gameContainer = document.getElementById('gameContainer');
+        const adventureModeButton = document.getElementById('adventureModeButton');
+        const normalPlayButton = document.getElementById('normalPlayButton');
+
+        const defaultShapesButton = document.getElementById('defaultShapesButton');
+        const animalShapesButton = document.getElementById('animalShapesButton');
+        const symbolShapesButton = document.getElementById('symbolShapesButton');
+
+        const adventureStatus = document.getElementById('adventureStatus');
+        const currentLevelDisplay = document.getElementById('currentLevelDisplay');
+        const gamesWonDisplay = document.getElementById('gamesWonDisplay');
+
+        let currentPlayer = 'X';
+        let board = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = true;
+        let gameMode = 'pvp'; // 'pvp' or 'pvc'
+        let difficulty = 'easy'; // 'easy', 'medium', 'hard'
+        const humanPlayer = 'O';
+        const computerPlayer = 'X';
+
+        let adventureMode = false;
+        let currentLevel = 1;
+        let gamesWon = 0;
+
+        const shapeSets = {
+            default: { X: 'X', O: 'O' },
+            animals: { X: '🐅', O: '🐘' },
+            symbols: { X: '★', O: '●' }
+        };
+        let currentShapeSet = 'default';
+        let player1Shape = shapeSets[currentShapeSet].X;
+        let player2Shape = shapeSets[currentShapeSet].O;
+
+        const winningConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        function handleCellClick(event) {
+            const clickedCell = event.target;
+            const clickedCellIndex = parseInt(clickedCell.getAttribute('data-cell-index'));
+
+            if (board[clickedCellIndex] !== '' || !gameActive) {
+                return;
+            }
+
+            if (gameMode === 'pvc' && currentPlayer === computerPlayer) {
+                // If it's PVC mode and computer's turn, human cannot click
+                return;
+            }
+
+            makeMove(clickedCellIndex, clickedCell);
+
+            // Computer move is now triggered after checkResult and player switch within makeMove
+        }
+
+        function makeMove(index, clickedCellElement) {
+            board[index] = currentPlayer;
+            cells[index].innerHTML = currentPlayer;
+            if (clickedCellElement) {
+                clickedCellElement.classList.add('clicked');
+                setTimeout(() => {
+                    clickedCellElement.classList.remove('clicked');
+                }, 200); // Match animation duration
+            }
+            checkResult();
+            if (!gameActive) return; // Prevent computer from moving if game ended
+
+            // Switch player only after a valid move and if the game is still active
+            currentPlayer = (currentPlayer === player1Shape) ? player2Shape : player1Shape;
+            gameStatus.innerHTML = `It's ${currentPlayer}'s turn`;
+
+            if (gameMode === 'pvc' && currentPlayer === computerPlayer && gameActive) {
+                setTimeout(computerMove, 500);
+            }
+        }
+
+        function updateAdventureDisplay() {
+            if (adventureMode) {
+                adventureStatus.style.display = 'block';
+                currentLevelDisplay.textContent = currentLevel;
+                gamesWonDisplay.textContent = gamesWon;
+            } else {
+                adventureStatus.style.display = 'none';
+            }
+        }
+
+        function computerMove() {
+            let bestMove = -1;
+            if (difficulty === 'easy') {
+                bestMove = getRandomMove();
+            } else if (difficulty === 'medium') {
+                bestMove = getMediumMove();
+            } else if (difficulty === 'hard') {
+                bestMove = getHardMove();
+            }
+
+            if (bestMove !== -1) {
+                board[bestMove] = computerPlayer; // Computer's move, always 'X'
+                cells[bestMove].innerHTML = computerPlayer;
+                cells[bestMove].classList.add('clicked');
+                setTimeout(() => {
+                    cells[bestMove].classList.remove('clicked');
+                }, 200); // Match animation duration
+                checkResult();
+                if (!gameActive) return; // Prevent player switch if game ended
+
+                currentPlayer = humanPlayer; // Switch to human after computer move
+                gameStatus.innerHTML = `It's ${humanPlayer}'s turn`; // Display human player's turn after computer move
+            }
+        }
+
+        function getRandomMove() {
+            const availableMoves = board.map((cell, index) => cell === '' ? index : -1).filter(index => index !== -1);
+            return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+        }
+
+        function getMediumMove() {
+            // Check if computer can win
+            for (let i = 0; i < winningConditions.length; i++) {
+                const [a, b, c] = winningConditions[i];
+                if (board[a] === computerPlayer && board[b] === computerPlayer && board[c] === '') return c;
+                if (board[a] === computerPlayer && board[c] === computerPlayer && board[b] === '') return b;
+                if (board[b] === computerPlayer && board[c] === computerPlayer && board[a] === '') return a;
+            }
+
+            // Check if player can win and block
+            for (let i = 0; i < winningConditions.length; i++) {
+                const [a, b, c] = winningConditions[i];
+                if (board[a] === humanPlayer && board[b] === humanPlayer && board[c] === '') return c;
+                if (board[a] === humanPlayer && board[c] === humanPlayer && board[b] === '') return b;
+                if (board[b] === humanPlayer && board[c] === humanPlayer && board[a] === '') return a;
+            }
+
+            // Take center if available
+            if (board[4] === '') return 4;
+
+            // Take a corner if available
+            const corners = [0, 2, 6, 8];
+            for (let i = 0; i < corners.length; i++) {
+                if (board[corners[i]] === '') return corners[i];
+            }
+
+            return getRandomMove();
+        }
+
+        function getHardMove() {
+            let bestScore = -Infinity;
+            let move = -1;
+            for (let i = 0; i < board.length; i++) {
+                if (board[i] === '') {
+                    board[i] = computerPlayer; // Assuming computer is 'X'
+                    let score = minimax(board, 0, false);
+                    board[i] = '';
+                    if (score > bestScore) {
+                        bestScore = score;
+                        move = i;
+                    }
+                }
+            }
+            return move;
+        }
+
+        function minimax(board, depth, isMaximizingPlayer) {
+            let scores = {
+                [computerPlayer]: 1,   // Computer wins
+                [humanPlayer]: -1,  // Human wins
+                tie: 0
+            };
+
+            let result = checkWinner();
+            if (result !== null) {
+                return scores[result];
+            }
+
+            if (isMaximizingPlayer) {
+                let bestScore = -Infinity;
+                for (let i = 0; i < board.length; i++) {
+                    if (board[i] === '') {
+                        board[i] = computerPlayer;
+                        let score = minimax(board, depth + 1, false);
+                        board[i] = '';
+                        bestScore = Math.max(score, bestScore);
+                    }
+                }
+                return bestScore;
+            } else {
+                let bestScore = Infinity;
+                for (let i = 0; i < board.length; i++) {
+                    if (board[i] === '') {
+                        board[i] = humanPlayer;
+                        let score = minimax(board, depth + 1, true);
+                        board[i] = '';
+                        bestScore = Math.min(score, bestScore);
+                    }
+                }
+                return bestScore;
+            }
+        }
+
+        function checkWinner() {
+            for (let i = 0; i < winningConditions.length; i++) {
+                const [a, b, c] = winningConditions[i];
+                if (board[a] !== '' && board[a] === board[b] && board[a] === board[c]) {
+                    return board[a];
+                }
+            }
+            if (!board.includes('')) {
+                return 'tie';
+            }
+            return null;
+        }
+
+        function checkResult() {
+            let roundWon = false;
+            let winningCells = []; // Initialize an empty array to store winning cells
+            for (let i = 0; i < winningConditions.length; i++) {
+                const winCondition = winningConditions[i];
+                let a = board[winCondition[0]];
+                let b = board[winCondition[1]];
+                let c = board[winCondition[2]];
+
+                if (a === '' || b === '' || c === '') {
+                    continue;
+                }
+                if (a === b && b === c) {
+                    roundWon = true;
+                    winningCells = winCondition; // Store winning cells
+                    break;
+                }
+            }
+
+            if (roundWon) {
+                gameStatus.innerHTML = `Player ${currentPlayer} has won!`;
+                gameActive = false;
+                winningCells.forEach(index => cells[index].classList.add('winning-cell'));
+
+                if (adventureMode && currentPlayer === humanPlayer) {
+                    gamesWon++;
+                    currentLevel++;
+                    // Immediately restart for next level in Adventure Mode
+                    setTimeout(() => restartGame(), 2000); // 2-second delay before next level
+                }
+                return;
+            }
+
+            let roundDraw = !board.includes('');
+            if (roundDraw) {
+                gameStatus.innerHTML = `Game ended in a draw!`;
+                gameActive = false;
+                return;
+            }
+        }
+
+        function getDifficultyForLevel(level) {
+            if (level <= 5) {
+                return 'easy';
+            } else if (level <= 15) {
+                return 'medium';
+            } else {
+                return 'hard';
+            }
+        }
+
+        function getRandomTheme() {
+            const themes = ['default', 'dark', 'forest', 'ocean', 'purple', 'retro'];
+            const currentTheme = document.body.className.replace('theme-', '') || 'default';
+            let availableThemes = themes.filter(theme => theme !== currentTheme);
+            if (availableThemes.length === 0) {
+                availableThemes = themes; // Fallback if only one theme left
+            }
+            return availableThemes[Math.floor(Math.random() * availableThemes.length)];
+        }
+
+        function restartGame() {
+            currentShapeSet = 'default'; // Reset to default shapes on restart
+            player1Shape = shapeSets[currentShapeSet].X;
+            player2Shape = shapeSets[currentShapeSet].O;
+
+            currentPlayer = player1Shape; // Player 1 starts with their chosen shape
+            board = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            gameStatus.innerHTML = `It's ${player1Shape}'s turn`; // Display player1Shape's turn
+            cells.forEach(cell => {
+                cell.innerHTML = '';
+                cell.classList.remove('winning-cell'); // Clear winning cells
+            });
+
+            if (adventureMode) {
+                difficulty = getDifficultyForLevel(currentLevel);
+                if (currentLevel % 20 === 0 && currentLevel !== 0) { // Change theme every 20 levels
+                    applyTheme(getRandomTheme());
+                }
+            }
+
+            if (gameMode === 'pvc' && currentPlayer === computerPlayer) {
+                setTimeout(computerMove, 500);
+            }
+            updateAdventureDisplay(); // Update display after restart
+        }
+
+        function applyTheme(themeName) {
+            document.body.className = ''; // Clear existing themes
+            if (themeName !== 'default') {
+                document.body.classList.add(`theme-${themeName}`);
+            }
+        }
+
+        function applyShapes(shapeSetName) {
+            currentShapeSet = shapeSetName;
+            player1Shape = shapeSets[currentShapeSet].X;
+            player2Shape = shapeSets[currentShapeSet].O;
+            restartGame();
+        }
+
+        pvpModeButton.addEventListener('click', () => {
+            gameMode = 'pvp';
+            difficultySelection.style.display = 'none';
+            restartGame();
+        });
+
+        pvcModeButton.addEventListener('click', () => {
+            gameMode = 'pvc';
+            difficultySelection.style.display = 'block';
+            restartGame();
+        });
+
+        easyButton.addEventListener('click', () => {
+            difficulty = 'easy';
+            restartGame();
+        });
+
+        mediumButton.addEventListener('click', () => {
+            difficulty = 'medium';
+            restartGame();
+        });
+
+        hardButton.addEventListener('click', () => {
+            difficulty = 'hard';
+            restartGame();
+        });
+
+        defaultThemeButton.addEventListener('click', () => applyTheme('default'));
+        darkThemeButton.addEventListener('click', () => applyTheme('dark'));
+        forestThemeButton.addEventListener('click', () => applyTheme('forest'));
+        oceanThemeButton.addEventListener('click', () => applyTheme('ocean'));
+        purpleThemeButton.addEventListener('click', () => applyTheme('purple'));
+        retroThemeButton.addEventListener('click', () => applyTheme('retro'));
+
+        defaultShapesButton.addEventListener('click', () => applyShapes('default'));
+        animalShapesButton.addEventListener('click', () => applyShapes('animals'));
+        symbolShapesButton.addEventListener('click', () => applyShapes('symbols'));
+
+        cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+        restartButton.addEventListener('click', restartGame);
+
+        gameStatus.innerHTML = `It's ${currentPlayer}'s turn`;
+
+        adventureModeButton.addEventListener('click', () => {
+            adventureMode = true;
+            gameMode = 'pvc'; // Adventure mode is always Player vs Computer
+            difficulty = 'easy'; // Start adventure mode on easy
+            currentLevel = 1; // Reset level
+            gamesWon = 0; // Reset games won
+            mainMenu.style.display = 'none';
+            gameContainer.style.display = 'block';
+            // Hide difficulty selection in adventure mode as it's controlled by level
+            difficultySelection.style.display = 'none';
+            restartGame(); // Start the first adventure level
+            updateAdventureDisplay();
+        });
+
+        normalPlayButton.addEventListener('click', () => {
+            adventureMode = false;
+            mainMenu.style.display = 'none';
+            gameContainer.style.display = 'block';
+            difficultySelection.style.display = 'block'; // Show difficulty for normal play
+            restartGame(); // Start a new game when entering normal play
+            updateAdventureDisplay();
+        });
+    </script>
+</body>
+</html>
