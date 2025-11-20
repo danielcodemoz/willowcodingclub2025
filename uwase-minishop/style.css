@@ -1,0 +1,140 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #dbeafe, #f0f9ff);
+    margin: 0;
+  }
+
+  header {
+    background-color: #3b82f6;
+    color: white;
+    text-align: center;
+    padding: 1.5em 0;
+    border-radius: 0 0 20px 20px;
+  }
+
+  .container {
+    width: 90%;
+    max-width: 800px;
+    margin: 2em auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 2em;
+  }
+
+  .btn {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+  }
+
+  .btn:hover {
+    background-color: #2563eb;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1em;
+  }
+
+  th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f1f5f9;
+  }
+
+  .actions button {
+    margin-right: 5px;
+  }
+
+  footer {
+    text-align: center;
+    color: #555;
+    padding: 1em;
+    font-size: 0.9em;
+  }
+
+/* Modal Styles */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  position: relative;
+}
+
+.close-button {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: #3b82f6;
+}
+
+.modal-content form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.modal-content form input[type="text"],
+.modal-content form input[type="number"] {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+.modal-content form button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1em;
+}
+
+.modal-content form button[type="submit"]:hover {
+  background-color: #2563eb;
+}

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Willow School News</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <h1 class="brand">Willow School News</h1>
+        <p class="subtitle">Latest updates and student stories</p>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="toolbar">
+        <div class="muted">Welcome, viewer</div>
+        <div class="header-actions">
+          <a class="btn" href="index.html">Switch role</a>
+        </div>
+      </div>
+
+      <section id="newsList" class="news-list"></section>
+
+      <section class="card feedback-form">
+        <h3 class="mt-0">Send feedback to admins</h3>
+        <div class="row mt-3">
+          <input id="fbName" class="input" placeholder="Your name (optional)" />
+        </div>
+        <div class="row mt-3">
+          <textarea id="fbMsg" placeholder="Your message"></textarea>
+        </div>
+        <div class="row mt-3">
+          <button id="sendFb" class="btn primary">Send Feedback</button>
+        </div>
+        <p id="fbThanks" class="muted mt-3 hidden">Thanks! Your feedback was sent.</p>
+      </section>
+    </main>
+
+    <div id="readerModal" class="modal hidden" aria-hidden="true" role="dialog" aria-labelledby="readerTitle">
+      <div class="modal-content">
+        <h3 id="readerTitle"></h3>
+        <p class="muted" id="readerMeta"></p>
+        <p id="readerBody" class="mt-3"></p>
+        <div class="row mt-4"><button id="closeReader" class="btn">Close</button></div>
+      </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+      function renderList() {
+        const container = document.getElementById('newsList');
+        const posts = window.News.all();
+        container.innerHTML = posts.map(p => `
+          <article class="news-card">
+            <h2 class="news-title"><span class="emoji">${p.emoji || ''}</span>${p.title}</h2>
+            <p class="news-excerpt">${p.body}</p>
+            <div class="mt-3">
+              <button class="btn primary" data-id="${p.id}">Read more</button>
+            </div>
+          </article>
+        `).join('');
+        container.querySelectorAll('button[data-id]').forEach(btn => {
+          btn.addEventListener('click', () => openReader(btn.getAttribute('data-id')));
+        });
+      }
+
+      function openReader(id) {
+        const p = window.News.get(id);
+        const modal = document.getElementById('readerModal');
+        document.getElementById('readerTitle').textContent = `${p.emoji || ''} ${p.title}`;
+        document.getElementById('readerMeta').textContent = `${p.type} • ${fmtDate(p.createdAt)}`;
+        document.getElementById('readerBody').textContent = p.body;
+        modal.classList.remove('hidden');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+      document.getElementById('closeReader').addEventListener('click', () => {
+        const modal = document.getElementById('readerModal');
+        modal.classList.add('hidden');
+        modal.setAttribute('aria-hidden', 'true');
+      });
+
+      renderList();
+
+      // Feedback
+      const fbBtn = document.getElementById('sendFb');
+      fbBtn.addEventListener('click', () => {
+        const name = document.getElementById('fbName').value.trim();
+        const msg = document.getElementById('fbMsg').value.trim();
+        if (!msg) return;
+        window.Feedback.add({ name, message: msg });
+        document.getElementById('fbMsg').value = '';
+        document.getElementById('fbThanks').classList.remove('hidden');
+        setTimeout(() => document.getElementById('fbThanks').classList.add('hidden'), 2000);
+      });
+    </script>
+  </body>
+  </html>
+

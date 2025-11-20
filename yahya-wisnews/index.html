@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Willow School News</title>
+  <style>
+    :root {
+      --primary: #66ff99;
+      --primary-dark: #00cc66;
+      --bg-gradient: linear-gradient(135deg, #0d0d0d, #1a1a1a, #2a2a2a);
+      --text-light: #f8f8f8;
+      --text-muted: #bfbfbf;
+      --card-bg: rgba(40, 40, 40, 0.6);
+      --card-border: rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Poppins", Arial, sans-serif;
+      margin: 0;
+      background: var(--bg-gradient);
+      color: var(--text-light);
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, #00994d, #00b359);
+      color: white;
+      text-align: center;
+      padding: 3rem 1rem 1.2rem;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+
+    header p {
+      margin: 0.5rem 0 1.5rem;
+      font-size: 1.1rem;
+      color: #e0ffe5;
+      opacity: 0.9;
+    }
+
+    /* ===== NAVBAR ===== */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      background: rgba(30, 30, 30, 0.8);
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0.8rem 1rem;
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    nav a:hover {
+      background: var(--primary-dark);
+      color: #111;
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    main {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    section {
+      display: none;
+    }
+
+    #home:target, 
+    #about:target, 
+    #contact:target, 
+    body:not(:target) #home {
+      display: block;
+    }
+
+    /* ===== HOME CARDS ===== */
+    .news-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+      margin-bottom: 2rem;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .news-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+      border-color: var(--primary);
+    }
+
+    .news-card h2 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 1.6rem;
+    }
+
+    .news-card p {
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-block;
+      background: var(--primary);
+      color: #111;
+      padding: 0.6rem 1.3rem;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(102, 255, 153, 0.4);
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(0, 204, 102, 0.5);
+      transform: translateY(-2px);
+    }
+
+    /* ===== ABOUT & CONTACT ===== */
+    #about, #contact {
+      background: var(--card-bg);
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+      line-height: 1.8;
+      animation: fadeIn 0.5s ease;
+    }
+
+    #about h2, #contact h2 {
+      color: var(--primary);
+      margin-top: 0;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+        gap: 0.8rem;
+      }
+      header h1 {
+        font-size: 2rem;
+      }
+      .news-card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header>
+    <h1>Willow School News</h1>
+    <p>Latest updates and student stories</p>
+  </header>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main>
+
+    <!-- HOME SECTION -->
+    <section id="home">
+      <div class="news-card">
+        <h2>🏫 Science Fair 2025</h2>
+        <p>Our annual Science Fair was a huge success! Students presented creative projects about renewable energy and robotics.</p>
+      </div>
+
+      <div class="news-card">
+        <h2>⚽ Inter-School Sports Day</h2>
+        <p>Willow School won 3 gold medals in athletics! Congratulations to all participants for their energy and teamwork.</p>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about">
+      <h2>About Willow School</h2>
+      <p>Willow School is a vibrant community of learners who strive for excellence, creativity, and compassion. Our mission is to provide an environment that inspires curiosity, responsibility, and growth.</p>
+      <p>Founded in 1995, Willow School has become known for its innovative programs and inclusive culture. We aim to help students reach their potential while giving back to their community.</p>
+      <a href="#home" class="btn">← Back to Home</a>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p>📍 123 Greenway Avenue, Willow City</p>
+      <p>📧 Email: info@willowschool.edu</p>
+      <p>📞 Phone: (123) 456-7890</p>
+      <p>We’d love to hear from you! Feel free to reach out for any inquiries, feedback, or ideas for our student news.</p>
+      <a href="#home" class="btn">← Back to Home</a>
+    </section>
+
+  </main>
+
+</body>
+</html>
