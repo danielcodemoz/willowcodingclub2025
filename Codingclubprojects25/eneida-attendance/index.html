@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Attendance Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>School Attendance Tracker</h1>
+                <p>Manage student attendance with ease</p>
+            </div>
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="register">Register</button>
+            </div>
+            
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+            
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="regUsername">Username</label>
+                    <input type="text" id="regUsername" placeholder="Choose a username" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email</label>
+                    <input type="email" id="regEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" placeholder="Create a password" required>
+                </div>
+                <div class="form-group">
+                    <label for="regConfirmPassword">Confirm Password</label>
+                    <input type="password" id="regConfirmPassword" placeholder="Confirm your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+            
+            <div class="demo-credentials">
+                <p><strong>Demo credentials:</strong> teacher / password123</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="app-container" style="display: none;">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <h1><i class="fas fa-graduation-cap"></i> Attendance Tracker</h1>
+            </div>
+            <div class="header-right">
+                <div class="theme-toggle">
+                    <button id="themeToggle" class="btn btn-icon">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                <div class="language-selector">
+                    <select id="languageSelect">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="tr">Türkçe</option>
+                    </select>
+                </div>
+                <button id="logoutBtn" class="btn btn-secondary">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li><a href="#dashboard" class="nav-link active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> <span data-translate="dashboard">Dashboard</span>
+                </a></li>
+                <li><a href="#students" class="nav-link" data-section="students">
+                    <i class="fas fa-users"></i> <span data-translate="students">Students</span>
+                </a></li>
+                <li><a href="#subjects" class="nav-link" data-section="subjects">
+                    <i class="fas fa-book"></i> <span data-translate="subjects">Subjects</span>
+                </a></li>
+                <li><a href="#clubs" class="nav-link" data-section="clubs">
+                    <i class="fas fa-star"></i> <span data-translate="clubs">Clubs</span>
+                </a></li>
+                <li><a href="#attendance" class="nav-link" data-section="attendance">
+                    <i class="fas fa-check-circle"></i> <span data-translate="attendance">Attendance</span>
+                </a></li>
+                <li><a href="#reports" class="nav-link" data-section="reports">
+                    <i class="fas fa-chart-bar"></i> <span data-translate="reports">Reports</span>
+                </a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="section-header">
+                    <h2 data-translate="dashboard">Dashboard</h2>
+                </div>
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalStudents">0</h3>
+                            <p data-translate="total_students">Total Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalSubjects">0</h3>
+                            <p data-translate="total_subjects">Total Subjects</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalClubs">0</h3>
+                            <p data-translate="total_clubs">Total Clubs</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="attendanceRate">0%</h3>
+                            <p data-translate="attendance_rate">Attendance Rate</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Students Section -->
+            <section id="students" class="content-section">
+                <div class="section-header">
+                    <h2 data-translate="students">Students</h2>
+                    <div class="section-actions">
+                        <button id="addSubjectBtn" class="btn btn-secondary">
+                            <i class="fas fa-book"></i> <span data-translate="add_subject">Add Subject</span>
+                        </button>
+                        <button id="addClubBtn" class="btn btn-secondary">
+                            <i class="fas fa-star"></i> <span data-translate="add_club">Add Club</span>
+                        </button>
+                        <button id="addStudentBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> <span data-translate="add_student">Add Student</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Quick Add Forms -->
+                <div class="quick-add-section">
+                    <div class="quick-add-card" id="quickAddSubject" style="display: none;">
+                        <h3><i class="fas fa-book"></i> Quick Add Subject</h3>
+                        <form id="quickAddSubjectForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label data-translate="subject_name">Subject Name</label>
+                                    <input type="text" id="quickSubjectName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label data-translate="subject_code">Subject Code</label>
+                                    <input type="text" id="quickSubjectCode" required>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="closeQuickAdd('quickAddSubject')" data-translate="cancel">Cancel</button>
+                                <button type="submit" class="btn btn-primary" data-translate="add_subject">Add Subject</button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="quick-add-card" id="quickAddClub" style="display: none;">
+                        <h3><i class="fas fa-star"></i> Quick Add Club</h3>
+                        <form id="quickAddClubForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label data-translate="club_name">Club Name</label>
+                                    <input type="text" id="quickClubName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label data-translate="meeting_time">Meeting Time</label>
+                                    <input type="text" id="quickClubMeetingTime" placeholder="e.g., Mondays 3:00 PM">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label data-translate="description">Description</label>
+                                <textarea id="quickClubDescription"></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" onclick="closeQuickAdd('quickAddClub')" data-translate="cancel">Cancel</button>
+                                <button type="submit" class="btn btn-primary" data-translate="add_club">Add Club</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="students-grid" id="studentsGrid">
+                    <!-- Students will be dynamically added here -->
+                </div>
+            </section>
+
+            <!-- Subjects Section -->
+            <section id="subjects" class="content-section">
+                <div class="section-header">
+                    <h2 data-translate="subjects">Subjects</h2>
+                    <button id="addSubjectBtn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> <span data-translate="add_subject">Add Subject</span>
+                    </button>
+                </div>
+                <div class="subjects-grid" id="subjectsGrid">
+                    <!-- Subjects will be dynamically added here -->
+                </div>
+            </section>
+
+            <!-- Clubs Section -->
+            <section id="clubs" class="content-section">
+                <div class="section-header">
+                    <h2 data-translate="clubs">Clubs</h2>
+                    <button id="addClubBtn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> <span data-translate="add_club">Add Club</span>
+                    </button>
+                </div>
+                <div class="clubs-grid" id="clubsGrid">
+                    <!-- Clubs will be dynamically added here -->
+                </div>
+            </section>
+
+            <!-- Attendance Section -->
+            <section id="attendance" class="content-section">
+                <div class="section-header">
+                    <h2 data-translate="attendance">Attendance</h2>
+                    <div class="attendance-controls">
+                        <select id="attendanceSubject" class="form-control">
+                            <option value="" data-translate="select_subject">Select Subject</option>
+                        </select>
+                        <input type="date" id="attendanceDate" class="form-control">
+                        <button id="markAttendanceBtn" class="btn btn-primary">
+                            <i class="fas fa-check"></i> <span data-translate="mark_attendance">Mark Attendance</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="attendance-table-container">
+                    <table class="attendance-table" id="attendanceTable">
+                        <thead>
+                            <tr>
+                                <th data-translate="student_name">Student Name</th>
+                                <th data-translate="present">Present</th>
+                                <th data-translate="absent">Absent</th>
+                                <th data-translate="late">Late</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceTableBody">
+                            <!-- Attendance rows will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports" class="content-section">
+                <div class="section-header">
+                    <h2 data-translate="reports">Reports</h2>
+                    <div class="report-controls">
+                        <select id="reportType" class="form-control">
+                            <option value="attendance" data-translate="attendance_report">Attendance Report</option>
+                            <option value="student" data-translate="student_report">Student Report</option>
+                            <option value="subject" data-translate="subject_report">Subject Report</option>
+                        </select>
+                        <input type="date" id="reportStartDate" class="form-control">
+                        <input type="date" id="reportEndDate" class="form-control">
+                        <button id="generateReportBtn" class="btn btn-primary">
+                            <i class="fas fa-download"></i> <span data-translate="export_pdf">Export PDF</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="report-content" id="reportContent">
+                    <!-- Report content will be generated here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Student Modal -->
+    <div id="addStudentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-translate="add_student">Add Student</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="addStudentForm">
+                <div class="form-group">
+                    <label data-translate="student_name">Student Name</label>
+                    <input type="text" id="studentName" required>
+                </div>
+                <div class="form-group">
+                    <label data-translate="student_id">Student ID</label>
+                    <input type="text" id="studentId" required>
+                </div>
+                <div class="form-group">
+                    <label data-translate="email">Email</label>
+                    <input type="email" id="studentEmail">
+                </div>
+                <div class="form-group">
+                    <label data-translate="phone">Phone</label>
+                    <input type="tel" id="studentPhone">
+                </div>
+                <div class="form-group">
+                    <label data-translate="subjects">Subjects</label>
+                    <div id="studentSubjects" class="checkbox-group">
+                        <!-- Subject checkboxes will be added here -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label data-translate="clubs">Clubs</label>
+                    <div id="studentClubs" class="checkbox-group">
+                        <!-- Club checkboxes will be added here -->
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-translate="cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary" data-translate="add_student">Add Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Subject Modal -->
+    <div id="addSubjectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-translate="add_subject">Add Subject</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="addSubjectForm">
+                <div class="form-group">
+                    <label data-translate="subject_name">Subject Name</label>
+                    <input type="text" id="subjectName" required>
+                </div>
+                <div class="form-group">
+                    <label data-translate="subject_code">Subject Code</label>
+                    <input type="text" id="subjectCode" required>
+                </div>
+                <div class="form-group">
+                    <label data-translate="description">Description</label>
+                    <textarea id="subjectDescription"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-translate="cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary" data-translate="add_subject">Add Subject</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Club Modal -->
+    <div id="addClubModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-translate="add_club">Add Club</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="addClubForm">
+                <div class="form-group">
+                    <label data-translate="club_name">Club Name</label>
+                    <input type="text" id="clubName" required>
+                </div>
+                <div class="form-group">
+                    <label data-translate="description">Description</label>
+                    <textarea id="clubDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label data-translate="meeting_time">Meeting Time</label>
+                    <input type="text" id="clubMeetingTime" placeholder="e.g., Mondays 3:00 PM">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-translate="cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary" data-translate="add_club">Add Club</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Club Schedule Modal -->
+    <div id="editClubScheduleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-clock"></i> Edit Club Schedule</h3>
+                <span class="close">&times;</span>
+            </div>
+            <form id="editClubScheduleForm">
+                <div class="form-group">
+                    <label>Club Name</label>
+                    <input type="text" id="editClubName" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Current Schedule</label>
+                    <input type="text" id="editCurrentSchedule" readonly>
+                </div>
+                <div class="form-group">
+                    <label>New Schedule</label>
+                    <textarea id="editNewSchedule" placeholder="Enter detailed schedule information..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Meeting Days</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="monday" value="Monday">
+                            <label for="monday">Monday</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="tuesday" value="Tuesday">
+                            <label for="tuesday">Tuesday</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="wednesday" value="Wednesday">
+                            <label for="wednesday">Wednesday</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="thursday" value="Thursday">
+                            <label for="thursday">Thursday</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="friday" value="Friday">
+                            <label for="friday">Friday</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="saturday" value="Saturday">
+                            <label for="saturday">Saturday</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sunday" value="Sunday">
+                            <label for="sunday">Sunday</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Meeting Time</label>
+                    <input type="time" id="editMeetingTime">
+                </div>
+                <div class="form-group">
+                    <label>Duration (minutes)</label>
+                    <input type="number" id="editDuration" min="30" max="300" value="60">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" data-translate="cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Schedule</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

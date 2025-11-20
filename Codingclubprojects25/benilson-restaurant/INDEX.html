@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>La Belle Cuisine</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="hero">
+    <div class="overlay">
+      <nav class="navbar">
+        <h1 class="logo">La Belle Cuisine</h1>
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#contact">Reservation</a></li>
+        </ul>
+      </nav>
+      <div class="hero-text">
+        <h2>Exquisite Dining Experience</h2>
+        <p>Where taste meets elegance</p>
+        <a href="#contact" class="btn">Book a Table</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="about" class="about">
+    <div class="container">
+      <h2>About Us</h2>
+      <p>
+        At La Belle Cuisine, we blend French culinary traditions with a modern twist.
+        Our chefs craft each dish with artistry and passion, creating a dining experience that is both refined and memorable.
+      </p>
+    </div>
+  </section>
+
+  <section id="menu" class="menu">
+    <div class="container">
+      <h2>Signature Dishes</h2>
+      <div class="menu-items">
+        <div class="menu-item">
+          <h3>Truffle Risotto</h3>
+          <p>Creamy Arborio rice with black truffle essence and parmesan crisps</p>
+        </div>
+        <div class="menu-item">
+          <h3>Filet Mignon</h3>
+          <p>Grilled tenderloin with red wine reduction and rosemary potatoes</p>
+        </div>
+        <div class="menu-item">
+          <h3>Lobster Bisque</h3>
+          <p>Velvety soup of Atlantic lobster, sherry cream, and fresh herbs</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery" class="gallery">
+    <div class="container">
+      <h2>Gallery</h2>
+      <div class="gallery-images">
+        <img src="https://source.unsplash.com/400x300/?fine-dining" alt="Fine Dining">
+        <img src="https://source.unsplash.com/400x300/?gourmet" alt="Gourmet Dish">
+        <img src="https://source.unsplash.com/400x300/?restaurant-interior" alt="Restaurant Interior">
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="container">
+      <h2>Reserve Your Table</h2>
+      <form>
+        <input type="text" placeholder="Name" required/>
+        <input type="email" placeholder="Email" required/>
+        <input type="date" required/>
+        <input type="time" required/>
+        <textarea placeholder="Special Requests"></textarea>
+        <button type="submit" class="btn">Reserve Now</button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 La Belle Cuisine. All Rights Reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

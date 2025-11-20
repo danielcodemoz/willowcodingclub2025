@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>REstaurante do ayirson</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #f1f8ff);
+      line-height: 1.6;
+      color: #033;
+    }
+    header {
+      background: #0288d1;
+      color: #fff;
+      padding: 1.5rem 0;
+      text-align: center;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    section {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border-left: 6px solid #00acc1;
+      position: relative;
+      overflow: hidden;
+    }
+    h2 {
+      color: #0288d1;
+      margin-top: 0;
+      border-bottom: 2px solid #00acc1;
+      display: inline-block;
+      padding-bottom: 0.3rem;
+    }
+    ul {
+      padding-left: 1.2rem;
+      list-style-type: none;
+    }
+    li {
+      margin: 0.7rem 0;
+      padding: 0.7rem 0.8rem;
+      border-bottom: 1px dashed #cce7f5;
+      transition: background 0.2s ease-in-out;
+    }
+    li:hover {
+      background: #e0f7fa;
+      border-radius: 5px;
+    }
+    .dish-top {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+    }
+    .desc {
+      font-size: 0.9rem;
+      color: #055;
+      margin-top: 0.3rem;
+    }
+    .price {
+      font-weight: bold;
+      color: #00796b;
+    }
+    .order-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      background: #0288d1;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s ease-in-out;
+    }
+    .order-btn:hover {
+      background: #0277bd;
+    }
+    footer {
+      text-align: center;
+      padding: 1.5rem 0;
+      background: #004d66;
+      color: #fff;
+      font-size: 1rem;
+      margin-top: 2rem;
+    }
+    footer .syimbol {
+      font-weight: bold;
+      font-size: 1.2em;
+      color: #4dd0e1;
+      margin-right: 0.3em;
+    }
+    .hours {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: #80deea;
+    }
+
+    /* Wavy divider */
+    .wave {
+      position: relative;
+      height: 60px;
+      background: linear-gradient(to right, #0288d1, #00acc1);
+      margin: -2rem -1rem 2rem -1rem;
+      border-radius: 0 0 50% 50% / 20%;
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,60,80,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    .modal-content h3 {
+      margin-top: 0;
+      color: #0288d1;
+    }
+    .modal-content input, .modal-content select {
+      width: 100%;
+      padding: 0.6rem;
+      margin: 0.6rem 0;
+      border-radius: 8px;
+      border: 1px solid #80deea;
+    }
+    .close-btn {
+      background: #ccc;
+      color: #033;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+    .close-btn:hover {
+      background: #aaa;
+    }
+    .submit-btn {
+      background: #00796b;
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+    .submit-btn:hover {
+      background: #00695c;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Menu do Ayirson do Menu</h1>
+  </header>
+
+  <main>
+    <section>
+      <h2>Startirs</h2>
+      <ul>
+        <li>
+          <div class="dish-top">Tomata Soup <span class="price">$4.50</span></div>
+          <div class="desc">Warm, cozy, and probly made with real tomatos (we think).</div>
+        </li>
+        <li>
+          <div class="dish-top">Bruschetto <span class="price">$5.00</span></div>
+          <div class="desc">Crunchy bread + tomato party = happy mouth.</div>
+        </li>
+        <li>
+          <div class="dish-top">Garloc Bread <span class="price">$3.50</span></div>
+          <div class="desc">Buttery, garlicky, slightly addictivooo.</div>
+        </li>
+        <li>
+          <div class="dish-top">Sprung Rolls <span class="price">$6.00</span></div>
+          <div class="desc">Crispy outside, mystery surprise inside. :D</div>
+        </li>
+      </ul>
+      <button class="order-btn">Order agora!</button>
+    </section>
+
+    <div class="wave"></div>
+
+    <section>
+      <h2>Main pratos</h2>
+      <ul>
+        <li>
+          <div class="dish-top">Grilled frango with Vegetables <span class="price">$12.00</span></div>
+          <div class="desc">Juicy chickene + some healthy greene stuf for balancee.</div>
+        </li>
+        <li>
+          <div class="dish-top">Spaghetti carbanara <span class="price">$10.50</span></div>
+          <div class="desc">Pastaaaa + creamii dream saucee. Italianoo approvedo (maybe).</div>
+        </li>
+        <li>
+          <div class="dish-top">Beefe Steak with Pepper Sauce <span class="price">$15.00</span></div>
+          <div class="desc">Big slab of beefe, spicy kicki sauce on top.</div>
+        </li>
+        <li>
+          <div class="dish-top">Vegetarianano Lasagna <span class="price">$11.00</span></div>
+          <div class="desc">Layers of veggieee luuve and cheesei magicoo.</div>
+        </li>
+      </ul>
+      <button class="order-btn">Order Now</button>
+    </section>
+
+    <div class="wave"></div>
+
+    <section>
+      <h2>Desserts</h2>
+      <ul>
+        <li>
+          <div class="dish-top">Chocolate Lavaa Caki <span class="price">$6.50</span></div>
+          <div class="desc">Chocolate explosiooon when you cut it. Boom!</div>
+        </li>
+        <li>
+          <div class="dish-top">Cheesecakee <span class="price">$5.50</span></div>
+          <div class="desc">Creamy slice of happiness straight to your soul.</div>
+        </li>
+        <li>
+          <div class="dish-top">Tiramisu <span class="price">$6.00</span></div>
+          <div class="desc">Coffee, cream, and soft layers – fancy but fun.</div>
+        </li>
+        <li>
+          <div class="dish-top">Ice Creaam Selectiooon <span class="price">$4.00</span></div>
+          <div class="desc">Scoop your dreams in many flavooorssss.</div>
+        </li>
+      </ul>
+      <button class="order-btn">Order Now</button>
+    </section>
+  </main>
+
+  <footer>
+    <span class="syimbol">©</span> 2024 CodingClub. All rights reserveeed. :D
+    <div class="hours">
+      <p>Opening Hrs: Mon–Fri 10:00 - 22:00 | Sat–Sun 12:00 - 23:30</p>
+      <p> Contaactoo 85 934 4967 locacion willow bar 123</p>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div class="modal" id="orderModal">
+    <div class="modal-content">
+      <h3>Place Your Order</h3>
+      <select id="dishSelect">
+        <option value="">-- Select a Dish --</option>
+        <option>Tomata Soup</option>
+        <option>Bruschetto</option>
+        <option>Garloc Bread</option>
+        <option>Sprung Rolls</option>
+        <option>Grilledi frango with Vegetables</option>
+        <option>Spaghetti carbanara</option>
+        <option>Beefe Steak with Pepperi Saucee</option>
+        <option>Vegetarianano Lasagna</option>
+        <option>Chocolate Lavaa Caki</option>
+        <option>Cheesecakee</option>
+        <option>Tiramisuiii</option>
+        <option>Ice Creaam Selectiooon</option>
+      </select>
+      <input type="text" id="customerName" placeholder="Your Name">
+      <input type="text" id="customerPhone" placeholder="Your Phone">
+      <button class="submit-btn" onclick="submitOrder()">Submit Order</button>
+      <button class="close-btn" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('orderModal');
+    const orderButtons = document.querySelectorAll('.order-btn');
+
+    orderButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.style.display = 'flex';
+      });
+    });
+
+    function closeModal() {
+      modal.style.display = 'none';
+    }
+
+    function submitOrder() {
+      const dish = document.getElementById('dishSelect').value;
+      const name = document.getElementById('customerName').value;
+      const phone = document.getElementById('customerPhone').value;
+
+      if (!dish || !name || !phone) {
+        alert("Please fill in all fields!");
+        return;
+      }
+
+      alert(`Thank you ${name}! Your order for "${dish}" has been placed. We will contact you at ${phone}.`);
+      closeModal();
+    }
+
+    // Close modal when clicking outside content
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        closeModal();
+      }
+    }
+  </script>
+</body>
+</html>
