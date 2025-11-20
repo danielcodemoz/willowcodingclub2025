@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" class="page">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Giraffe Bistro — Home</title>
+    <link rel="stylesheet" href="restaurant.css">
+  </head>
+  <body>
+    <header>
+      <div class="container nav">
+        <a class="brand" href="Index.html" aria-label="Giraffe Bistro Home">
+          <div class="logo">G</div>
+          <span>Giraffe Bistro</span>
+        </a>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="Index.html" aria-current="page">Home</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <div class="panel">
+            <div class="kicker">Seasonal, local, memorable</div>
+            <h1>Welcome to Giraffe Bistro</h1>
+            <p class="lead">Modern comfort food crafted with fresh ingredients and a dash of playfulness. Dine in, take out, or let us cater your next gathering.</p>
+            <a class="cta" href="menu.html">Browse the Menu →</a>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <h2 class="section-title">Guest favorites</h2>
+          <div class="grid">
+            <article class="card">
+              <h3>Truffle Smash Burger</h3>
+              <div class="menu-item-desc">Double smashed beef, gruyère, truffle aioli, brioche.</div>
+              <div class="price">$16</div>
+            </article>
+            <article class="card">
+              <h3>Roasted Beet Salad</h3>
+              <div class="menu-item-desc">Citrus, goat cheese, pistachio brittle, baby greens.</div>
+              <div class="price">$13</div>
+            </article>
+            <article class="card">
+              <h3>Lemon Ricotta Pancakes</h3>
+              <div class="menu-item-desc">Blueberry compote, whipped ricotta, maple.</div>
+              <div class="price">$14</div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div>© <span id="year">2025</span> Giraffe Bistro</div>
+        <div>123 Tall Ave, Savannah, GA • Open Daily 8a–10p</div>
+      </div>
+    </footer>
+  </body>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</html>

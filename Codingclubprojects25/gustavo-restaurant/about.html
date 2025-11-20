@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" class="page">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Giraffe Bistro — About</title>
+    <link rel="stylesheet" href="restaurant.css">
+  </head>
+  <body>
+    <header>
+      <div class="container nav">
+        <a class="brand" href="Index.html" aria-label="Giraffe Bistro Home">
+          <div class="logo">G</div>
+          <span>Giraffe Bistro</span>
+        </a>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="Index.html">Home</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <li><a href="about.html" aria-current="page">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <h1>Our Story</h1>
+      <p class="lead">Founded in 2025, Giraffe Bistro was born from a love of tall ideas and towering flavors. We partner with local farms and purveyors to serve dishes that are playful, seasonal, and satisfying.</p>
+
+      <section>
+        <h2 class="section-title">What we believe</h2>
+        <div class="grid about-grid">
+          <article class="card">
+            <h3>Local first</h3>
+            <p class="menu-item-desc">From greens to grains, we shop nearby to reduce our footprint and elevate freshness.</p>
+          </article>
+          <article class="card">
+            <h3>Hospitality matters</h3>
+            <p class="menu-item-desc">We strive to make every guest feel seen, welcomed, and delighted.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div>© <span id="year">2025</span> Giraffe Bistro</div>
+        <div>123 Tall Ave, Savannah, GA • Open Daily 8a–10p</div>
+      </div>
+    </footer>
+  </body>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</html>
+

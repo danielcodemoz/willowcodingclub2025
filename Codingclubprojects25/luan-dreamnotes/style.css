@@ -1,0 +1,40 @@
+body{
+    background-color: rgb(255, 238, 6);
+}
+
+.header{
+    background-color: rgb(160, 255, 211);
+    text-align: center;
+    border-bottom: solid rgb(161, 240, 146);
+    border: 2px solid #7d7d7d;
+    margin: 21px;
+    border-radius: 11px
+}
+
+.header h1{
+    color: rgb(12, 29, 179);
+}
+
+.header p{
+    color: rgb(14, 64, 231);
+}
+
+.about{
+    background-color: white;
+    border: 2px solid #7d7d7d;
+    margin: 21px;
+    border-radius: 11px;
+    border-spacing: 3px
+}
+
+.header h2{
+    color: blue;
+}
+
+.Activities{
+    background-color: white;
+    border: 2px solid #7d7d7d;
+    margin: 21px;
+    border-radius: 11px;
+    border-spacing: 3px
+}

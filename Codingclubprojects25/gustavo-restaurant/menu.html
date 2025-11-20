@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" class="page">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Giraffe Bistro — Menu</title>
+    <link rel="stylesheet" href="restaurant.css">
+  </head>
+  <body>
+    <header>
+      <div class="container nav">
+        <a class="brand" href="Index.html" aria-label="Giraffe Bistro Home">
+          <div class="logo">G</div>
+          <span>Giraffe Bistro</span>
+        </a>
+        <nav aria-label="Primary">
+          <ul>
+            <li><a href="Index.html">Home</a></li>
+            <li><a href="menu.html" aria-current="page">Menu</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <h1>Menu</h1>
+      <div class="menu-tabs" role="tablist" aria-label="Menu categories">
+        <a role="tab" aria-selected="true" href="#starters">Starters</a>
+        <a role="tab" aria-selected="false" href="#mains">Mains</a>
+        <a role="tab" aria-selected="false" href="#brunch">Brunch</a>
+        <a role="tab" aria-selected="false" href="#sides">Sides</a>
+        <a role="tab" aria-selected="false" href="#desserts">Desserts</a>
+        <a role="tab" aria-selected="false" href="#drinks">Drinks</a>
+      </div>
+
+      <section id="starters" aria-labelledby="starters-heading">
+        <h2 id="starters-heading" class="section-title">Starters</h2>
+        <div class="grid menu-grid">
+          <article class="card">
+            <div class="menu-item-title"><h3>Crispy Calamari</h3><span class="price">$12</span></div>
+            <div class="menu-item-desc">Lemon pepper, garlic aioli.</div>
+          </article>
+          <article class="card">
+            <div class="menu-item-title"><h3>Tomato Bisque</h3><span class="price">$9</span></div>
+            <div class="menu-item-desc">Basil oil, parmesan crisp.</div>
+          </article>
+          <article class="card">
+            <div class="menu-item-title"><h3>Street Corn Ribs</h3><span class="price">$11</span></div>
+            <div class="menu-item-desc">Cotija, chili-lime, cilantro.</div>
+          </article>
+        </div>
+      </section>
+
+      <section id="mains" aria-labelledby="mains-heading">
+        <h2 id="mains-heading" class="section-title">Mains</h2>
+        <div class="grid menu-grid">
+          <article class="card">
+            <div class="menu-item-title"><h3>Truffle Smash Burger</h3><span class="price">$16</span></div>
+            <div class="menu-item-desc">Double beef, gruyère, truffle aioli, brioche.</div>
+          </article>
+          <article class="card">
+            <div class="menu-item-title"><h3>Herbed Salmon</h3><span class="price">$22</span></div>
+            <div class="menu-item-desc">Lemon beurre blanc, asparagus.</div>
+          </article>
+          <article class="card">
+            <div class="menu-item-title"><h3>Wild Mushroom Risotto</h3><span class="price">$18</span></div>
+            <div class="menu-item-desc">Porcini, thyme, pecorino.</div>
+          </article>
+        </div>
+      </section>
+
+      <section id="brunch" aria-labelledby="brunch-heading">
+        <h2 id="brunch-heading" class="section-title">Brunch</h2>
+        <div class="grid menu-grid">
+          <article class="card">
+            <div class="menu-item-title"><h3>Lemon Ricotta Pancakes</h3><span class="price">$14</span></div>
+            <div class="menu-item-desc">Blueberry compote, maple.</div>
+          </article>
+          <article class="card">
+            <div class="menu-item-title"><h3>Avocado Toast</h3><span class="price">$13</span></div>
+            <div class="menu-item-desc">Pickled onion, feta, chili crunch.</div>
+          </article>
+          <article class="card">
+            <div class="menu-item-title"><h3>Short Rib Hash</h3><span class="price">$17</span></div>
+            <div class="menu-item-desc">Poached eggs, chimichurri.</div>
+          </article>
+        </div>
+      </section>
+
+      <section id="sides" aria-labelledby="sides-heading">
+        <h2 id="sides-heading" class="section-title">Sides</h2>
+        <div class="grid menu-grid">
+          <article class="card">
+            <div class="menu-item-title"><h3>Parmesan Fries</h3><span class="price">$6</span></div>
+            <div class="menu-item-desc">Garlic, herbs.</div>
+          </article>
+          <article class="card">
+            <div class="menu-item-title"><h3>Seasonal Vegetables</h3><span class="price">$6</span></div>
+            <div class="menu-item-desc">Olive oil, sea salt.</div>
+          </article>
+          <article class="card">
+            <div class="menu-item-title"><h3>Side Salad</h3><span class="price">$5</span></div>
+            <div class="menu-item-desc">Vinaigrette.</div>
+          </article>
+        </div>
+      </section>
+
+      <section id="desserts" aria-labelledby="desserts-heading">
+        <h2 id="desserts-heading" class="section-title">Desserts</h2>
+        <div class="grid menu-grid">
+          <article class="card">
+            <div class="menu-item-title"><h3>Chocolate Lava Cake</h3><span class="price">$9</span></div>
+            <div class="menu-item-desc">Vanilla gelato.</div>
+          </article>
+          <article class="card">
+            <div class="menu-item-title"><h3>Crème Brûlée</h3><span class="price">$8</span></div>
+            <div class="menu-item-desc">Madagascar vanilla.</div>
+          </article>
+        </div>
+      </section>
+
+      <section id="drinks" aria-labelledby="drinks-heading">
+        <h2 id="drinks-heading" class="section-title">Drinks</h2>
+        <div class="grid menu-grid">
+          <article class="card">
+            <div class="menu-item-title"><h3>House Lemonade</h3><span class="price">$4</span></div>
+            <div class="menu-item-desc">Mint, raw sugar.</div>
+          </article>
+          <article class="card">
+            <div class="menu-item-title"><h3>Cold Brew</h3><span class="price">$4</span></div>
+            <div class="menu-item-desc">12-hour steep.</div>
+          </article>
+          <article class="card">
+            <div class="menu-item-title"><h3>Mocktail: Sunset Spritz</h3><span class="price">$6</span></div>
+            <div class="menu-item-desc">Citrus, bitters, soda.</div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div>© <span id="year">2025</span> Giraffe Bistro</div>
+        <div>123 Tall Ave, Savannah, GA • Open Daily 8a–10p</div>
+      </div>
+    </footer>
+  </body>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</html>
+

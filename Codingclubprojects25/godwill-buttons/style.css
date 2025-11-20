@@ -1,0 +1,59 @@
+.successbtn{
+    background-color:green;
+    color: white;
+    font-size: 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.infobtn{
+    background-color:blue;      
+    color: white;
+    font-size: 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.warningbtn{
+    background-color:orange;
+    color: white;
+    font-size: 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.dangerbtn{
+    background-color:red;
+    color: white;
+    font-size: 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.success{
+    background-color:green;
+}
+.info{
+    background-color:blue;
+}
+.warning{
+    background-color:orange;
+}
+.danger{
+    background-color:red;
+}
+
+.successbtn{
+    border: 2px solid black;
+}
+.infobtn{
+    border: 2px solid black;
+}
+.warningbtn{
+    border: 2px solid black;
+}
+.dangerbtn{
+    border: 2px solid black;
+}

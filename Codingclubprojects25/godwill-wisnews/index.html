@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Willow School News</title>
+    <link href=" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F9F9F9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #e70707;
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+
+        header p {
+            margin: 8px 0 0 0;
+            font-size: 1.1em;
+            font-weight: 300;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid #e20f0f; /* Changed to blue */
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h2 {
+            font-size: 1.4em;
+            color: #333;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .card p {
+            color: #222;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        .read-more-btn {
+            background-color: #eb0b0b; /* Changed to blue */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 6px 14px;
+            margin-top: 15px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+        }
+
+        .read-more-btn:hover {
+            background-color: #dd0707; /* Darker blue on hover */
+        }
+
+        .extra-content {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            color: #555;
+        }
+
+        .expanded .extra-content {
+            display: block;
+        }
+
+        .expanded .read-more-btn {
+            background-color: #da0b0b; /* Darker blue when expanded */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Willow School News</h1>
+        <p>Latest updates and student stories</p>
+    </header>
+
+    <div class="container">
+        <div class="card" id="card1">
+            <h2>Science Fair</h2>
+            <p>Our annual Science Fair was a huge success! Students presented creative projects about renewable energy and robotics.</p>
+            <div class="extra-content">
+                <p>The science fair showcased over 50 amazing projects from students across all grade levels. Highlights included a solar-powered car, a robot that can sort recyclables, and a model of a sustainable city. Judges were impressed by the creativity and scientific rigor demonstrated by all participants.</p>
+                <p>Special recognition goes to:</p>
+                <ul>
+                    <li>Sarah Johnson (Grade 8) - Best Engineering Project</li>
+                    <li>Michael Chen (Grade 10) - Most Innovative Solution</li>
+                    <li>Emma Rodriguez (Grade 7) - Outstanding Scientific Method</li>
+                </ul>
+                <p>The event was sponsored by local tech companies and universities who provided prizes and mentoring opportunities for our young scientists.</p>
+            </div>
+            <button class="read-more-btn" onclick="toggleContent('card1')">Read more</button>
+        </div>
+
+        <div class="card" id="card2">
+            <h2>School Sports Day</h2>
+            <p>Willow School won 3 gold medals in athletics! Congratulations to all participants for their energy and teamwork.</p>
+            <div class="extra-content">
+                <p>Our school athletes showed exceptional performance in this year's inter-school competition. The gold medals were won in the 100m sprint, long jump, and relay race.</p>
+                <p>Full results:</p>
+                <ul>
+                    <li>🥇 100m Sprint - James Wilson (Year 9)</li>
+                    <li>🥇 Long Jump - Aisha Patel (Year 10)</li>
+                    <li>🥇 4x100m Relay - Team A (Years 7-8)</li>
+                    <li>🥈 High Jump - Tom Bradley (Year 8)</li>
+                    <li>🥉 Shot Put - Lisa Wong (Year 11)</li>
+                </ul>
+                <p>Special recognition goes to our cheerleading team who received the sportsmanship award for their positive attitude and encouragement of all participants. The event was attended by over 500 students, parents, and teachers from 6 local schools.</p>
+            </div>
+            <button class="read-more-btn" onclick="toggleContent('card2')">Read more</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleContent(cardId) {
+            const card = document.getElementById(cardId);
+            const button = card.querySelector('.read-more-btn');
+            
+            card.classList.toggle('expanded');
+            
+            if (card.classList.contains('expanded')) {
+                button.textContent = 'Read less';
+            } else {
+                button.textContent = 'Read more';
+            }
+        }
+    </script>
+</body>
+</html>

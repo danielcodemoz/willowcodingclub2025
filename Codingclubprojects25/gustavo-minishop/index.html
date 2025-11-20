@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mini Shop - CRUD Store</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Mini Shop</h1>
+  </header>
+
+  <main>
+    <!-- Add Product Form -->
+    <section class="form-section">
+      <h2>Add Product to Cart</h2>
+      <form id="product-form">
+        <label for="category-select">Category</label>
+        <select id="category-select" required>
+          <option value="" disabled selected>Select category</option>
+        </select>
+
+        <label for="item-select">Item</label>
+        <select id="item-select" required disabled>
+          <option value="" disabled selected>Select item</option>
+        </select>
+
+        <label for="quantity-input">Quantity</label>
+        <input
+          type="number"
+          id="quantity-input"
+          min="1"
+          value="1"
+          required
+        />
+
+        <label for="price-input">Price per Item ($)</label>
+        <input type="number" id="price-input" readonly />
+
+        <button type="submit">Add to Cart</button>
+      </form>
+    </section>
+
+    <!-- Cart Table -->
+    <section class="cart-section">
+      <h2>Shopping Cart</h2>
+      <table id="cart-table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price ($)</th>
+            <th>Subtotal ($)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div id="total-container">Total: $0.00</div>
+    </section>
+
+    <hr />
+
+    <!-- Admin Section -->
+    <section class="admin-section">
+      <h2>Manage Categories & Items</h2>
+
+      <div class="admin-block">
+        <h3>Add New Category</h3>
+        <input
+          type="text"
+          id="new-category-name"
+          placeholder="Enter new category name"
+        />
+        <button id="add-category-btn">Add Category</button>
+      </div>
+
+      <div class="admin-block">
+        <h3>Add New Item to Category</h3>
+        <label for="admin-category-select">Category</label>
+        <select id="admin-category-select">
+          <option value="" disabled selected>Select category</option>
+        </select>
+
+        <input
+          type="text"
+          id="new-item-name"
+          placeholder="Enter new item name"
+        />
+        <input
+          type="number"
+          id="new-item-price"
+          placeholder="Enter item price ($)"
+          min="0.01"
+          step="0.01"
+        />
+        <button id="add-item-btn">Add Item</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Initial product data
+    const productsData = {
+      Vegetables: {
+        Carrot: 0.5,
+        Broccoli: 1.2,
+        Spinach: 1.0,
+        Tomato: 0.8,
+        Potato: 0.6,
+      },
+      Fruits: {
+        Apple: 0.7,
+        Banana: 0.3,
+        Orange: 0.6,
+        Grapes: 1.5,
+        Mango: 2.0,
+      },
+      Dairy: {
+        Milk: 1.5,
+        Cheese: 2.5,
+        Yogurt: 1.0,
+        Butter: 2.2,
+        Cream: 1.8,
+      },
+      Snacks: {
+        Chips: 1.8,
+        Popcorn: 1.2,
+        Nuts: 2.0,
+        Crackers: 1.5,
+        Pretzels: 1.3,
+      },
+      Candy: {
+        Chocolate: 1.0,
+        "Gummy Bears": 0.9,
+        Lollipop: 0.4,
+        "Hard Candy": 0.5,
+        "Candy Bar": 1.1,
+      },
+    };
+
+    // Cached DOM elements
+    const categorySelect = document.getElementById("category-select");
+    const itemSelect = document.getElementById("item-select");
+    const priceInput = document.getElementById("price-input");
+    const quantityInput = document.getElementById("quantity-input");
+    const productForm = document.getElementById("product-form");
+    const cartTableBody = document.querySelector("#cart-table tbody");
+    const totalContainer = document.getElementById("total-container");
+
+    const newCategoryInput = document.getElementById("new-category-name");
+    const addCategoryBtn = document.getElementById("add-category-btn");
+    const adminCategorySelect = document.getElementById("admin-category-select");
+    const newItemNameInput = document.getElementById("new-item-name");
+    const newItemPriceInput = document.getElementById("new-item-price");
+    const addItemBtn = document.getElementById("add-item-btn");
+
+    // Cart array
+    let cart = [];
+
+    // Populate category selects
+    function populateCategorySelects() {
+      // Clear existing options except default
+      [categorySelect, adminCategorySelect].forEach((sel) => {
+        sel.innerHTML = '<option value="" disabled selected>Select category</option>';
+      });
+
+      Object.keys(productsData).forEach((category) => {
+        const option1 = document.createElement("option");
+        option1.value = category;
+        option1.textContent = category;
+        categorySelect.appendChild(option1);
+
+        const option2 = document.createElement("option");
+        option2.value = category;
+        option2.textContent = category;
+        adminCategorySelect.appendChild(option2);
+      });
+
+      // Disable item select until category chosen
+      itemSelect.innerHTML = '<option value="" disabled selected>Select item</option>';
+      itemSelect.disabled = true;
+      priceInput.value = "";
+    }
+
+    // When category changes, populate items dropdown
+    categorySelect.addEventListener("change", () => {
+      const selectedCategory = categorySelect.value;
+      itemSelect.disabled = false;
+      itemSelect.innerHTML = '<option value="" disabled selected>Select item</option>';
+
+      if (selectedCategory && productsData[selectedCategory]) {
+        const items = productsData[selectedCategory];
+        Object.keys(items).forEach((itemName) => {
+          const option = document.createElement("option");
+          option.value = itemName;
+          option.textContent = itemName;
+          itemSelect.appendChild(option);
+        });
+      }
+
+      priceInput.value = "";
+    });
+
+    // When item changes, update price input
+    itemSelect.addEventListener("change", () => {
+      const cat = categorySelect.value;
+      const item = itemSelect.value;
+      if (cat && item && productsData[cat] && productsData[cat][item] !== undefined) {
+        priceInput.value = productsData[cat][item].toFixed(2);
+      } else {
+        priceInput.value = "";
+      }
+    });
+
+    // Add product to cart
+    productForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const category = categorySelect.value;
+      const item = itemSelect.value;
+      const quantity = parseInt(quantityInput.value);
+      const price = parseFloat(priceInput.value);
+
+      if (!category || !item || !quantity || !price) {
+        alert("Please fill out all fields correctly.");
+        return;
+      }
+
+      // Check if item already in cart, then increment quantity
+      const existingIndex = cart.findIndex(
+        (p) => p.category === category && p.item === item
+      );
+
+      if (existingIndex !== -1) {
+        cart[existingIndex].quantity += quantity;
+      } else {
+        cart.push({ category, item, quantity, price });
+      }
+
+      renderCart();
+      productForm.reset();
+      itemSelect.disabled = true;
+      priceInput.value = "";
+    });
+
+    // Render cart table
+    function renderCart() {
+      cartTableBody.innerHTML = "";
+      let total = 0;
+
+      cart.forEach((product, index) => {
+        const subtotal = product.quantity * product.price;
+        total += subtotal;
+
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+          <td>${product.category}</td>
+          <td>${product.item}</td>
+          <td>${product.quantity}</td>
+          <td>$${product.price.toFixed(2)}</td>
+          <td>$${subtotal.toFixed(2)}</td>
+          <td>
+            <button class="btn-delete" data-index="${index}">Delete</button>
+          </td>
+        `;
+
+        cartTableBody.appendChild(tr);
+      });
+
+      totalContainer.textContent = `Total: $${total.toFixed(2)}`;
+
+      // Attach delete handlers
+      document.querySelectorAll(".btn-delete").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const idx = parseInt(btn.getAttribute("data-index"));
+          cart.splice(idx, 1);
+          renderCart();
+        });
+      });
+    }
+
+    // Add new category
+    addCategoryBtn.addEventListener("click", () => {
+      const newCategory = newCategoryInput.value.trim();
+      if (!newCategory) {
+        alert("Please enter a category name.");
+        return;
+      }
+      if (productsData[newCategory]) {
+        alert("Category already exists.");
+        return;
+      }
+      productsData[newCategory] = {};
+      populateCategorySelects();
+      newCategoryInput.value = "";
+      alert(`Category "${newCategory}" added.`);
+    });
+
+    // Add new item to category
+    addItemBtn.addEventListener("click", () => {
+      const cat = adminCategorySelect.value;
+      const itemName = newItemNameInput.value.trim();
+      const itemPrice = parseFloat(newItemPriceInput.value);
+
+      if (!cat) {
+        alert("Please select a category.");
+        return;
+      }
+      if (!itemName) {
+        alert("Please enter an item name.");
+        return;
+      }
+      if (!itemPrice || itemPrice <= 0) {
+        alert("Please enter a valid item price.");
+        return;
+      }
+      if (productsData[cat][itemName]) {
+        alert("Item already exists in this category.");
+        return;
+      }
+
+      productsData[cat][itemName] = itemPrice;
+      populateCategorySelects();
+
+      // If user has selected this category in form, refresh items dropdown
+      if (categorySelect.value === cat) {
+        categorySelect.dispatchEvent(new Event("change"));
+      }
+
+      newItemNameInput.value = "";
+      newItemPriceInput.value = "";
+      alert(`Item "${itemName}" added to category "${cat}".`);
+    });
+
+    // Initialize dropdowns on page load
+    window.onload = () => {
+      populateCategorySelects();
+      renderCart();
+    };
+  </script>
+</body>
+</html>

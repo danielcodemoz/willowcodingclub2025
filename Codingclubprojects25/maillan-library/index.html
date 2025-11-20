@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamShelf Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-logo">DreamShelf</h1>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link" data-translate="home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#books" class="nav-link" data-translate="books">Books</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link" data-translate="about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link" data-translate="contact">Contact</a>
+                </li>
+                <li class="nav-item auth-hidden" id="login-nav">
+                    <a href="#login" class="nav-link" data-translate="login">Login</a>
+                </li>
+                <li class="nav-item auth-hidden" id="signup-nav">
+                    <a href="#signup" class="nav-link" data-translate="signup">Signup</a>
+                </li>
+                <li class="nav-item auth-required" id="logout-nav" style="display: none;">
+                    <a href="#" class="nav-link" onclick="logoutUser()" data-translate="logout">Logout</a>
+                </li>
+            </ul>
+            <div class="nav-controls">
+                <select id="language-selector" class="language-selector">
+                    <option value="en" selected>English</option>
+                    <option value="pt">Português</option>
+                    <option value="tr">Türkçe</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="hi">हिन्दी</option>
+                </select>
+                <button id="dark-mode-toggle" class="dark-mode-toggle">🌙</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <section id="home" class="page active">
+        <div class="hero">
+            <div class="hero-content">
+                <h1 data-translate="welcome">Welcome to DreamShelf Library — Read. Learn. Grow.</h1>
+                <p data-translate="explore">Explore our vast collection of books from around the world.</p>
+                <a href="#books" class="cta-button" data-translate="browse">Browse Books</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Books Page -->
+    <section id="books" class="page">
+        <div class="container">
+            <h2 data-translate="ourBooks">Our Books</h2>
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="Search books..." data-translate-placeholder="searchPlaceholder">
+            </div>
+            <div class="admin-controls">
+                <button id="admin-panel-btn" data-translate="adminPanel">Admin Panel</button>
+            </div>
+            <div class="books-grid" id="books-container">
+                <!-- Books will be dynamically added here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Page -->
+    <section id="about" class="page">
+        <div class="container">
+            <h2 data-translate="about">About Us</h2>
+            <p data-translate="aboutText">DreamShelf Library is a modern digital library dedicated to providing access to literature and knowledge for everyone. Our mission is to make reading accessible, enjoyable, and convenient for people of all ages.</p>
+            <p data-translate="aboutText2">Founded in 2023, we've grown to include thousands of titles across multiple genres, from classic literature to contemporary bestsellers.</p>
+        </div>
+    </section>
+
+    <!-- Contact Page -->
+    <section id="contact" class="page">
+        <div class="container">
+            <h2 data-translate="contact">Contact Us</h2>
+            <div class="contact-info">
+                <p><strong data-translate="address">Address:</strong> 123 Library Street, Bookville, BK 12345</p>
+                <p><strong data-translate="phone">Phone:</strong> (123) 456-7890</p>
+                <p><strong data-translate="email">Email:</strong> info@dreamshelf.com</p>
+            </div>
+            <div class="social-links">
+                <a href="#" data-translate="facebook">Facebook</a>
+                <a href="#" data-translate="twitter">Twitter</a>
+                <a href="#" data-translate="instagram">Instagram</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Page -->
+    <section id="login" class="page">
+        <div class="container">
+            <div class="form-container">
+                <h2 data-translate="login">Login</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-email" data-translate="email">Email / Username</label>
+                        <input type="text" id="login-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password" data-translate="password">Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <div class="form-group">
+                        <a href="#" data-translate="forgotPassword">Forgot Password?</a>
+                    </div>
+                    <button type="submit" data-translate="login">Login</button>
+                </form>
+                <p data-translate="noAccount">Don't have an account? <a href="#signup">Sign up</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Signup Page -->
+    <section id="signup" class="page">
+        <div class="container">
+            <div class="form-container">
+                <h2 data-translate="signup">Signup</h2>
+                <form id="signup-form">
+                    <div class="form-group">
+                        <label for="signup-name" data-translate="fullName">Full Name</label>
+                        <input type="text" id="signup-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email" data-translate="email">Email</label>
+                        <input type="email" id="signup-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password" data-translate="password">Password</label>
+                        <input type="password" id="signup-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-confirm-password" data-translate="confirmPassword">Confirm Password</label>
+                        <input type="password" id="signup-confirm-password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="terms" required>
+                            <span data-translate="agree">I agree to the terms and conditions</span>
+                        </label>
+                    </div>
+                    <button type="submit" data-translate="signup">Signup</button>
+                </form>
+                <p data-translate="haveAccount">Already have an account? <a href="#login">Login</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Panel -->
+    <section id="admin" class="page">
+        <div class="container">
+            <h2 data-translate="adminPanel">Admin Panel</h2>
+            <div class="admin-form">
+                <h3 data-translate="addBook">Add New Book</h3>
+                <form id="book-form">
+                    <div class="form-group">
+                        <label for="book-title" data-translate="title">Title</label>
+                        <input type="text" id="book-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="book-author" data-translate="author">Author</label>
+                        <input type="text" id="book-author" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="book-price" data-translate="price">Price ($)</label>
+                        <input type="number" id="book-price" min="0" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="book-image" data-translate="imageUrl">Image URL</label>
+                        <input type="text" id="book-image" placeholder="https://example.com/image.jpg">
+                    </div>
+                    <button type="submit" data-translate="addBook">Add Book</button>
+                </form>
+            </div>
+            <div class="admin-edit-section">
+                <h3 data-translate="editBook">Edit Book</h3>
+                <div id="edit-form-container">
+                    <!-- Edit form will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>DreamShelf Library</h3>
+                    <p data-translate="footerText">Your gateway to knowledge and imagination.</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-translate="contact">Contact</h4>
+                    <p>123 Library Street, Bookville, BK 12345</p>
+                    <p>Email: info@dreamshelf.com</p>
+                    <p>Phone: (123) 456-7890</p>
+                </div>
+                <div class="footer-section">
+                    <h4 data-translate="follow">Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" data-translate="facebook">Facebook</a>
+                        <a href="#" data-translate="twitter">Twitter</a>
+                        <a href="#" data-translate="instagram">Instagram</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 DreamShelf Library. <span data-translate="rights">All rights reserved.</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Book Edit Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 data-translate="editBook">Edit Book</h2>
+            <form id="edit-book-form">
+                <input type="hidden" id="edit-book-id">
+                <div class="form-group">
+                    <label for="edit-book-title" data-translate="title">Title</label>
+                    <input type="text" id="edit-book-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-book-price" data-translate="price">Price ($)</label>
+                    <input type="number" id="edit-book-price" min="0" step="0.01" required>
+                </div>
+                <button type="submit" data-translate="saveChanges">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

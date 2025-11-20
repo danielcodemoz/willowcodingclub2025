@@ -1,0 +1,51 @@
+.successbtn{
+background-color: green;
+color: white;
+font-size: 50px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+
+.infobtn{
+    background-color: blue;
+    color: white;
+    font-size: 50px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.warningbtn{
+    background-color: orange;
+    color: white;
+    font-size: 50px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.dangerbtn{
+    background-color: red;
+    color: white;
+    font-size: 50px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.successpage{
+background-color: darkgreen;
+}
+
+.infopage{
+background-color: darkblue;
+}
+
+.warningpage{
+background-color: darkorange;
+}
+
+.dangerpage{
+background-color: darkred;
+}

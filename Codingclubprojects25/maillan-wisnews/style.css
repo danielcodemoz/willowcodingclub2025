@@ -1,0 +1,254 @@
+/* Base styles and CSS variables for light/dark mode */
+:root {
+  /* Light mode variables */
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --card-bg: #ffffff;
+  --footer-text: #666666;
+  --accent-color: #3fa24f;
+  --button-bg: #3fa24f;
+  --button-hover: #338545;
+  --box-shadow: rgba(0, 0, 0, 0.1);
+  --accent-bar: #3fa24f;
+}
+
+/* Dark mode variables */
+[data-theme="dark"] {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --card-bg: #1e1e1e;
+  --footer-text: #aaaaaa;
+  --accent-color: #3fa24f;
+  --button-bg: #3fa24f;
+  --button-hover: #2d7a3a;
+  --box-shadow: rgba(0, 0, 0, 0.3);
+  --accent-bar: #3fa24f;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --card-bg: #1e1e1e;
+    --footer-text: #aaaaaa;
+    --accent-color: #3fa24f;
+    --button-bg: #3fa24f;
+    --button-hover: #2d7a3a;
+    --box-shadow: rgba(0, 0, 0, 0.3);
+    --accent-bar: #3fa24f;
+  }
+}
+
+/* Global styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  line-height: 1.6;
+}
+
+/* Header styles */
+header {
+  background-color: var(--accent-color);
+  padding: 2rem 1rem;
+  text-align: center;
+  position: relative;
+}
+
+header h1 {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+header p {
+  color: white;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+#theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#theme-toggle:hover,
+#theme-toggle:focus {
+  background: rgba(255, 255, 255, 0.3);
+  outline: 2px solid white;
+}
+
+/* Main content */
+main {
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.news-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* News card styles */
+.news-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--box-shadow);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.news-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px var(--box-shadow);
+}
+
+.accent-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 6px;
+  background-color: var(--accent-bar);
+}
+
+.card-content {
+  padding: 20px 20px 20px 30px;
+}
+
+.emoji {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.card-content h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: var(--text-color);
+}
+
+.description {
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.extra-content {
+  display: none;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+.extra-content p {
+  margin-bottom: 15px;
+}
+
+.read-more-btn {
+  background-color: var(--button-bg);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.read-more-btn:hover,
+.read-more-btn:focus {
+  background-color: var(--button-hover);
+  outline: 2px solid var(--accent-color);
+}
+
+/* Footer styles */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: 0.9rem;
+  color: var(--footer-text);
+  margin-top: 2rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 2rem;
+  }
+  
+  header p {
+    font-size: 1rem;
+  }
+  
+  .card-content {
+    padding: 15px 15px 15px 25px;
+  }
+  
+  .card-content h2 {
+    font-size: 1.5rem;
+  }
+  
+  .emoji {
+    font-size: 1.5rem;
+  }
+  
+  #theme-toggle {
+    top: 15px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 1.5rem 1rem;
+  }
+  
+  header h1 {
+    font-size: 1.7rem;
+  }
+  
+  main {
+    padding: 1.5rem 0.5rem;
+  }
+  
+  .news-container {
+    gap: 20px;
+  }
+  
+  .card-content {
+    padding: 15px 15px 15px 20px;
+  }
+  
+  .card-content h2 {
+    font-size: 1.3rem;
+  }
+}

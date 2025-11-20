@@ -1,0 +1,33 @@
+body{
+    background: linear-gradient(to bottom, #f1f1f1 0%, #b7b8b7 100%);
+
+}
+.header{
+    background:linear-gradient(to bottom, #c3dae7 0%, #386179 100%);
+    text-align:center;
+    border-bottom:4px solid #202931;
+
+.header h1{
+    color: #3d3b31;
+
+}
+.header p{
+    color:rgb(38, 55, 63);
+    
+}
+}
+.about{
+    background-color:white;
+    border: 2px solid #7d7c77;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+}
+.activity{
+        background-color: #7aaaad;
+        border: 2px solid #7d7c77;
+        margin: 20px;
+        padding: 20px;
+        border-radius: 10px;
+}
+

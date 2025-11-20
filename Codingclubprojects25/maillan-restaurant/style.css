@@ -1,0 +1,73 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  background: #fefefe;
+  color: #333;
+  padding: 20px;
+}
+
+/* Header */
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+header h1 {
+  font-size: 2.8rem;
+  color: #c0392b;
+}
+
+header p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* Menu Layout */
+.menu {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.category {
+  margin-bottom: 40px;
+}
+
+.category h2 {
+  border-bottom: 2px solid #c0392b;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #c0392b;
+}
+
+/* Menu Items */
+.menu-item {
+  margin-bottom: 20px;
+}
+
+.menu-item h3 {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  color: #2c3e50;
+}
+
+.menu-item p {
+  color: #666;
+  margin-top: 5px;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: 60px;
+  font-size: 0.9rem;
+  color: #aaa;
+}
